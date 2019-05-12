@@ -1,0 +1,39 @@
+.nav li a {
+    color: #1b6d85;
+    text-align: center;
+}
+
+.nav li {
+    margin: 0 auto;
+    width: 20%;
+}
+
+.rec {
+    margin: 0 auto;
+    font-size: 30px;
+    width: 100%;
+    list-style: none;
+    text-align: center;
+    padding: 0;
+
+}
+
+.rec_li {
+    background-color: #eee;
+border-radius:20px 20px 20px 20px;
+
+    margin: 0 auto;
+    margin-bottom: 10px;
+
+    width: 80%;
+}
+
+.rec_li_span1 {
+    font-family: "华文楷体";
+    font-size: 20px;
+}
+
+.rec_li_span2 {
+    font-family: "";
+    font-size: 15px;
+}

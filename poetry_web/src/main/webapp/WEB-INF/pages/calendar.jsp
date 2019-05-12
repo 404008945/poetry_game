@@ -1,0 +1,333 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2019/3/12/012
+  Time: 14:32
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>诗词日历</title>
+    <meta name="author"  content="JackeyGao">
+    <meta name="description" content="JackeyGao, 一个程序员的技术分享和对生活的理解.">
+    <meta name="keywords"  content="JackeyGao, JackeyGao的日记本, Python, Django, Vue.js, chinese-poetry">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/global.css">
+    <link rel="stylesheet" href="/assets/theme.css">
+    <link rel="stylesheet" href="/assets/semantic/components/site.min.css">
+    <link rel="stylesheet" href="/assets/semantic/components/grid.min.css">
+    <link rel="stylesheet" href="/assets/semantic/components/menu.min.css">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+    <link rel="mask-icon" href="/assets/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="/assets/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+</head>
+<body style="background-color: #eaf5ff">
+<div id="main" >
+    <div class="container">
+        <div id="grid" class="ui stackable two column grid">
+            <div class="zuo column" style="background: rgba(255, 255, 255, 0.6);">
+                <div id="imageCover" class="cover">
+                    <div class="intro">
+                        <div class="inner">
+                            <div class="left" style="display: inline-block;" onclick="last()">
+                                ←
+                            </div>
+                            <div class="middle">春风十里不如你</div>
+
+                            <div class="right" style="display: inline-block;" onclick="next()">
+                                →
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="you column">
+                <a href="/enjoy/index" style="font-size: 23px;float:left;color:#e14b7e;margin-top:30px;font-weight: lighter;">点击返回主页</a>
+                <div class="you-wrapper" style="background: rgba(255, 255, 255, 0.6);">
+                    <div class="progress">
+                        <div id="progress" class="label"></div>
+                    </div>
+
+                    <div class="ui today only-screen equal width grid">
+                        <div class="l five wide column">
+                            <div id="todaySolar" class="yang">2018.11.30 周五</div>
+                            <div id="firstSolar" class="yang">2018.11.30</div>
+                        </div>
+                        <div class="r column">
+                            <div onclick="today()" id="todayLunar" class="yin">十月廿三</div>
+                            <div onclick="today()" id="firstLunar" class="yin">十月廿三</div>
+                        </div>
+                    </div>
+
+
+                    <div class="middle">
+                        <div class="ui pinfo equal width grid meta">
+                            <div id="ptitle" class="l title ten wide column">
+                                虞美人
+                            </div>
+                            <div id="pauthor" class="r author column">
+                                李煜
+                            </div>
+                        </div>
+                        <div id="pcontent-wrapper">
+                            <div id="pcontent-grid" class="ui equal width grid">
+                                <div class="l twelve wide column">
+                                    <div id="pcontent" class="poetry-content">
+                                        <p>春花秋月何时了，往事知多少？</p>
+
+                                        <p>小楼昨夜又东风，故国不堪回首月明中。</p>
+
+                                        <p>雕栏玉砌应犹在，只是朱颜改。</p>
+
+                                        <p>问君能有几多愁？恰似一江春水向东流。</p>
+                                    </div>
+                                </div>
+                                <div class="r column">
+                                    <div class="meta">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="calendar">
+                        <div class="ui text seven item menu">
+                            <div id="w1" data-date="2018-08-01" class="item">
+                                <div>
+                                    <div class="yang">26</div>
+                                    <div class="yin">十九</div>
+                                </div>
+                            </div>
+                            <div id="w2" class="item">
+                                <div>
+                                    <div class="yang">26</div>
+                                    <div class="yin">十九</div>
+                                </div>
+                            </div>
+                            <div id="w3" class="item">
+                                <div>
+                                    <div class="yang header">26</div>
+                                    <div class="yin">十九</div>
+                                </div>
+                            </div>
+                            <div id="w4" class="item">
+                                <div>
+                                    <div class="yang header">26</div>
+                                    <div class="yin">十九</div>
+                                </div>
+                            </div>
+                            <div id="w5" class="item">
+                                <div>
+                                    <div class="yang header">27</div>
+                                    <div class="yin">二十</div>
+                                </div>
+                            </div>
+                            <div id="w6" class="item">
+                                <div>
+                                    <div class="yang header">28</div>
+                                    <div class="yin">廿一</div>
+                                </div>
+                            </div>
+                            <div id="w7" class="item">
+                                <div>
+                                    <div class="yang header">29</div>
+                                    <div class="yin">廿二</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer">
+                    © All Rights Reserved.
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+<script src="/assets/js/calendar.js"></script>
+<script src="/assets/js/web.js"></script>
+<script src="/assets/js/节日表.js"></script>
+<script src="/assets/js/诗词表.js"></script>
+<script src="/assets/js/images.js"></script>
+<script src="/assets/js/tang300.js"></script>
+<script>
+    var wrappers = ["site-wrapper", "social-links-wrapper", "donation-wrapper", "skin-wrapper"]
+    var allImages = Object.values(images)
+    function render(t) {
+        window.day = t;
+        var ji = getJijie(t)
+        var jijieFlower = JIJIEMAP[ji]
+        // 季节花
+        document.getElementById("grid").style.backgroundImage = "url('/assets/images/" + jijieFlower + ".png')";
+        // 进度条
+        document.getElementById("progress").style.width = getProgress(t) + '%';
+
+        var currentWeekNumber = weekNumber(t);
+        var currentMonday = monDay(t);
+        var currentWeeks = weekDays(currentMonday);
+
+        var day = calendar.solar2lunar(t.getFullYear(), t.getMonth() + 1, t.getDate());
+
+        var lunarDate = day.gzYear + '·' + day.IMonthCn + day.IDayCn;
+        var solarDate = day.cYear + '.' + day.cMonth + '.' + day.cDay + '   ' + day.ncWeek;
+
+        document.getElementById("todayLunar").innerHTML = lunarDate
+        document.getElementById("todaySolar").innerHTML = solarDate
+
+
+        // Poetry
+        var poetry = weekPoetry[currentWeekNumber[1] - 1]
+
+        if (!poetry) {
+            var poetry = poetrys[Math.floor(Math.random() * poetrys.length)];
+            poetry.content = poetry.paragraphs
+        }
+
+        // images
+        if (poetry.image) {
+            var image = images[poetry.image]
+        } else {
+            var image = allImages[Math.floor(Math.random() * allImages.length)];
+        }
+
+        document.getElementById("imageCover").style.backgroundImage = "url('/images/" + image.src + "')";
+        console.log( image)
+
+        // dynasty
+        if (poetry.dynasty) {
+            var author = poetry.dynasty + '·' + poetry.author;
+        } else {
+            var author = poetry.author;
+        }
+
+        setContentP(poetry.content)
+        document.getElementById("ptitle").innerHTML = poetry.title
+        document.getElementById("pauthor").innerHTML = author
+
+        var weekIds = ["w1", "w2", "w3", "w4", "w5", "w6", "w7"]
+        var firstSolar = ""
+        var firstLunar = ""
+
+
+        for (var i in weekIds) {
+            var id = weekIds[i];
+            var solar = currentWeeks[i];
+            var lunar = calendar.solar2lunar(
+                solar.getFullYear(),
+                solar.getMonth() + 1,
+                solar.getDate()
+            );
+
+
+            if (id === 'w1') {
+                firstSolar = firstSolar + pad(lunar.cMonth) + '.' + pad(lunar.cDay) + ''
+                firstLunar = firstLunar + pad(lunar.IMonthCn) + pad(lunar.IDayCn);
+            }
+
+
+            if (id === 'w7') {
+                titleSolar = lunar.cYear + '-' + '第' + pad(currentWeekNumber[1]) + '周';
+                firstSolar = firstSolar + '~' + pad(lunar.cMonth) + '.' + pad(lunar.cDay) + ''
+                firstLunar = firstLunar + '~' + pad(lunar.IMonthCn) + pad(lunar.IDayCn);
+                document.getElementById("firstSolar").innerHTML = firstSolar
+                document.getElementById("firstLunar").innerHTML = firstLunar
+
+                document.title = '诗词周历-' + titleSolar + '-' + firstSolar;
+            }
+
+            var el = document.getElementById(id);
+
+            if (solar.getDate() === t.getDate()) {
+                el.classList.add("active");
+                if (lunar.lMonth === 4 && lunar.lDay === 26) {
+                    setContentP(["祝你生日快乐", "祝你生日快乐", "祝你生日快乐","祝你生日快乐~~"])
+                    document.getElementById("ptitle").innerHTML = "生日歌"
+                    document.getElementById("pauthor").innerHTML = "党中央"
+                }
+            } else {
+                el.classList.remove("active")
+            }
+
+            console.log(lunar.cYear, window.year)
+
+            if (lunar.cYear !== window.year) {
+                el.classList.add('no')
+            } else {
+                el.classList.remove('no')
+            }
+
+            el.getElementsByClassName("yang")[0].innerHTML = lunar.cDay
+
+            var lunarElement = el.getElementsByClassName("yin")[0]
+
+            var nextDay = new Date(solar.getFullYear(),  solar.getMonth(), solar.getDate())
+            nextDay.setDate(solar.getDate() + 1);
+
+            var nextDay = calendar.solar2lunar(
+                nextDay.getFullYear(),
+                nextDay.getMonth() + 1,
+                nextDay.getDate()
+            );
+
+            if (nextDay.IMonthCn + nextDay.IDayCn === '正月初一') {
+                lunarElement.innerHTML = '除夕'
+                continue
+            }
+
+            if (nextDay.Term === '清明') {
+                lunarElement.innerHTML = '寒食'
+                continue
+            }
+
+            if (lunar.IMonthCn + lunar.IDayCn in lundarDayMap) {
+                lunarElement.innerHTML = lundarDayMap[lunar.IMonthCn + lunar.IDayCn]
+                continue
+            }
+
+            if (lunar.cMonth + '.' + lunar.cDay in solarDayMap) {
+                lunarElement.innerHTML = solarDayMap[lunar.cMonth + '.' + lunar.cDay]
+                continue
+            }
+
+            if (lunar.Term) {
+                lunarElement.innerHTML = lunar.Term
+            } else {
+                lunarElement.innerHTML = lunar.IDayCn
+            }
+
+        }
+    }
+
+    // render(new Date());
+    var url = new URL(window.location.href);
+    var d = url.searchParams.get("d");
+
+    if (d !== null) {
+        var renderDate = new Date(d);
+    } else {
+        var renderDate = new Date()
+    }
+
+    window.year = renderDate.getFullYear()
+    render(renderDate)
+</script>
+</html>
+

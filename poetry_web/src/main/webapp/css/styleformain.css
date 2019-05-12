@@ -1,0 +1,50 @@
+
+.user img {
+    width: 100px;
+    height: 100px;
+    display: block;
+    margin: 0 auto;
+    border-radius: 50%;
+}
+
+.win {
+    color: #5BC0DE;
+}
+
+.lose {
+    color: #CCC;
+}
+
+.name {
+    text-align: center;
+}
+
+.num {
+    text-align: center;
+    font-size: 50px;
+}
+
+.ans {
+    text-align: center;
+}
+
+.start {
+    text-align: center;
+    font-size: 80px;
+    display: block;
+}
+
+.tip {
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+body {
+    background: url(/img/startbg.GIF) no-repeat;
+}
+
+.start-tip {
+    font-size: 20px;
+}
+

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.poetry.dao.PoetryDao">
+  <resultMap id="BaseResultMap" type="com.poetry.entity.Poetry">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="author_id" jdbcType="INTEGER" property="authorId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="dynasty" jdbcType="CHAR" property="dynasty" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="yunlv_rule" jdbcType="LONGVARCHAR" property="yunlvRule" />
+    <result column="info_id" jdbcType="INTEGER" property="infoId" />
+      <result column="likes" jdbcType="INTEGER" property="likes"   />
+      <collection property="commentForPoetry" select="com.poetry.dao.CommentForPoetryDao.selectByPoetryId" column="id"/>
+  </resultMap>
+
+  <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select *
+    from `poetry`
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+    <select id="selectByAuthor" resultMap="BaseResultMap">
+    select distinct poetry.id, author_id, title, author, dynasty, content, yunlv_rule,info_id,likes
+    from `poetry`
+    where author = #{author,jdbcType=INTEGER}
+    order by (
+    select count(*)
+    from likesforpoetry
+    where poetry.id=likesforpoetry.poetry_id
+    )desc
+  </select>
+
+    <select id="selectByTitle" resultMap="BaseResultMap">
+    select *
+    from `poetry`
+    where title = #{title,jdbcType=INTEGER}
+  </select>
+
+    <select id="selectByDynasty" resultMap="BaseResultMap">
+    select distinct poetry.id, author_id, title, author, dynasty, content, yunlv_rule,info_id,likes
+    from `poetry`,likesforpoetry
+    WHERE dynasty = #{dynasty,jdbcType=INTEGER}
+    order by (
+    select count(*)
+    from likesforpoetry
+    where poetry.id=likesforpoetry.poetry_id
+    )desc
+  </select>
+
+
+    <select id="selectOne" resultMap="BaseResultMap">
+    SELECT * FROM `poetry`
+    where (not content like '%~%')
+    order by rand() limit 1;
+  </select>
+
+
+
+  <select id="selectByContent" resultMap="BaseResultMap">
+    select id, author_id, title, author, dynasty, content,info_id
+    from `poetry`
+    <where>
+      <if test="content!=null">
+        <bind name="pattern" value="'%' +content + '%'" />
+        and (content LIKE #{pattern} or title like #{pattern})
+      </if>
+    </where>
+  </select>
+    <select id="selectByInfoId"  resultMap="BaseResultMap">
+        select  *  from  poetry
+        where  info_id=#{infoId}
+    </select>
+
+  <select id="selectByChar" parameterType="com.poetry.entity.HeadPoetry" resultMap="BaseResultMap">
+    select content
+     from poetry
+     where ((content like concat(#{headPoetry.character},'%'))
+     or content like concat('%,',#{headPoetry.character},'%')
+     or content like concat('%|',#{headPoetry.character},'%')
+     )
+     <if test="headPoetry.type==1">
+         <!--五言-->
+         and CHAR_LENGTH(content)=51
+     </if>
+      <if test="headPoetry.type==2">
+          <!--七言-->
+          and CHAR_LENGTH(content)=67
+      </if>
+     and (length(content)-length(replace(content,'|',''))=3)
+     limit 1;
+  </select>
+    <select id="selectByRecommend" resultMap="BaseResultMap">
+        select poetry.id, author_id, title, author, dynasty, content, yunlv_rule,info_id,likes
+        from poetry,info
+        where
+        <if test="recommend.choose==0">
+            <!--按照诗人来查-->
+            author_id=${recommend.authorId}
+        </if>
+        <if test="recommend.choose==1">
+            <!--按照类型来查-->
+            poetry.info_id=info.id and
+            <bind name="pattern" value="'%' +recommend.type + '%'"/>
+            (info.type LIKE #{pattern})
+        </if>
+        <if test="recommend.choose==2">
+            <!--按照朝代来查-->
+            poetry.dynasty="${recommend.dynasty}"
+        </if>
+        order by rand() limit 1;
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
+            parameterType="com.poetry.entity.Poetry">
+        insert into poetry(title,content,info_id,author_id,yunlv_rule,author,dynasty,likes)
+        values(#{title},#{content},#{infoId},#{authorId},#{yunlvRule},#{author},#{dynasty},#{likes})
+    </insert>
+
+
+</mapper>

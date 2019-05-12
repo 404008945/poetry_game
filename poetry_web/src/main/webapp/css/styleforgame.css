@@ -1,0 +1,234 @@
+body {
+    min-width: 300px;
+    background: url("../img/bg2.GIF");
+}
+
+.global {
+    overflow: hidden;
+}
+
+.text {
+    margin: 105px 0 0 -56px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#load {
+    width: 200px;
+    height: 180px;
+    background: url("../img/laoding.gif") no-repeat;
+    background-size: 100%;
+    position: absolute;
+    left: 50%;
+    top: 100px;
+    margin-left: -85px;
+}
+
+.text-main1, .text-main2, .text-main3, .text-main4, .text-main5, .text-main6, .text-main7, .text-main8, .text-main9, .text-main10, .text-main11, .text-main0 {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    position: relative;
+    left: 0;
+}
+/*//afasdf*/
+.text-main11{
+    margin-top: 130px;
+}
+.question-text {
+    width: 70%;
+    margin: 0 auto;
+
+    overflow: hidden;
+}
+
+.question-act {
+    font: 30px Arial;
+    font-weight: lighter;
+
+    animation: questionplay 0.5s;
+    /* Firefox: */
+    -moz-animation: questionplay 0.5s;
+    /* Safari 和 Chrome: */
+    -webkit-animation: questionplay 0.5s;
+    /* Opera: */
+    -o-animation: questionplay 0.5s;
+}
+
+@keyframes questionplay {
+    0% {
+        left: 100%;
+    }
+    100% {
+        left: 0;
+    }
+}
+
+@-webkit-keyframes questionplay /* Safari and Chrome */
+{
+    0% {
+        left: 100%;
+    }
+    100% {
+        left: 0;
+    }
+}
+
+.key-menu1, .key-menu2, .key-menu3, .key-menu4, .key-menu5, .key-menu6, .key-menu8, .key-menu9, .key-menu10 {
+    width: 100%;
+    margin: 50px auto 0 auto;
+    overflow: hidden;
+}
+
+
+.key {
+    width: 100%;
+    margin: 0 auto 15px auto;
+    position: relative;
+    font: italic 30px arial, sans-serif;
+    left: 0;
+    font-weight: lighter;
+}
+
+.key1 {
+    background-size: 100% 100%;
+}
+
+.key2 .key3 {
+    background-size: 100%;
+}
+
+.key-action {
+    animation: keyplay 0.8s;
+    /* Firefox: */
+    -moz-animation: keyplay 0.8s;
+    /* Safari 和 Chrome: */
+    -webkit-animation: keyplay 0.8s;
+    /* Opera: */
+    -o-animation: keyplay 0.8s;
+}
+
+@keyframes keyplay {
+    0% {
+        left: 100%;
+    }
+    20% {
+        left: 100%;
+    }
+    100% {
+        left: 0;
+    }
+}
+
+@-webkit-keyframes keyplay /* Safari and Chrome */
+{
+    0% {
+        left: 100%;
+    }
+    20% {
+        left: 100%;
+    }
+    100% {
+        left: 0;
+    }
+}
+
+.key-action2 {
+    animation: keyplay2 1.0s;
+    /* Firefox: */
+    -moz-animation: keyplay2 1.0s;
+    /* Safari 和 Chrome: */
+    -webkit-animation: keyplay2 1.0s;
+    /* Opera: */
+    -o-animation: keyplay2 1.0s;
+}
+
+@keyframes keyplay2 {
+    0% {
+        left: 100%;
+    }
+    30% {
+        left: 100%;
+    }
+    100% {
+        left: 0;
+    }
+}
+
+@-webkit-keyframes keyplay2 /* Safari and Chrome */
+{
+    0% {
+        left: 100%;
+    }
+    30% {
+        left: 100%;
+    }
+    100% {
+        left: 0;
+    }
+}
+
+.key-action3 {
+    animation: keyplay3 1.2s;
+    /* Firefox: */
+    -moz-animation: keyplay3 1.2s;
+    /* Safari 和 Chrome: */
+    -webkit-animation: keyplay3 1.2s;
+    /* Opera: */
+    -o-animation: keyplay3 1.2s;
+}
+
+@keyframes keyplay3 {
+    0% {
+        left: 100%;
+    }
+    40% {
+        left: 100%;
+    }
+    100% {
+        left: 0;
+    }
+}
+
+@-webkit-keyframes keyplay3 /* Safari and Chrome */
+{
+    0% {
+        left: 100%;
+    }
+    40% {
+        left: 100%;
+    }
+    100% {
+        left: 0;
+    }
+}
+
+.yes-icon {
+    width: 50px;
+    height: 30px;
+    position: absolute;
+    background: url("../img/yes.png") no-repeat;
+    background-size: 100%;
+    bottom: 0;
+    left: 12px;
+}
+
+.no-icon {
+    width: 50px;
+    height: 30px;
+    position: absolute;
+    background: url("../img/no.png") no-repeat;
+    background-size: 100%;
+    left: 2px;
+    bottom: 0;
+}
+
+.hide {
+    display: none;
+}
+
+.headPic {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.poetry.dao.UserPoetryDao">
+  <resultMap id="BaseResultMap" type="com.poetry.entity.UserPoetry">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="likes" jdbcType="INTEGER" property="likes" />
+    <result column="time" jdbcType="INTEGER" property="time" />
+    <result column="views" jdbcType="INTEGER" property="views" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from `user_poetry`
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.poetry.entity.UserPoetry" useGeneratedKeys="true">
+    insert into `user_poetry` (title, content, user_id,likes,`time`,views,username
+      )
+    values (#{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER},#{likes,jdbcType=INTEGER},#{time,jdbcType=INTEGER},#{views,jdbcType=INTEGER},#{username,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.poetry.entity.UserPoetry">
+    update `user_poetry`
+    set title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      `time` = #{time,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, title, content, user_id,`time`,views,username
+    from `user_poetry`
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllByTime" resultMap="BaseResultMap">
+    select id, title, content, user_id,likes,`time`,views,username
+    from `user_poetry`
+    order by `time` desc
+  </select>
+
+  <select id="selectAllByLikes" resultMap="BaseResultMap">
+    select id, title, content, user_id,likes,`time`,views,username
+    from `user_poetry`
+    order by `likes` desc
+  </select>
+
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, title, content, user_id,likes,`time`,views,username
+    from `user_poetry`
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByUserLike" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select user_poetry.id, title, content, user_poetry.user_id,likes,`time`,views,username
+    from `user_poetry`,likes
+    where likes.user_id=#{id} and likes.poetry_id=user_poetry.id
+  </select>
+
+  <update id="addLikes" parameterType="java.lang.Integer">
+    update user_poetry
+    set likes=likes+1
+    where id=#{id};
+  </update>
+
+  <update id="subLikes" parameterType="java.lang.Integer">
+    update user_poetry
+    set likes=likes-1
+    where id=#{id};
+  </update>
+
+  <update id="addViews" parameterType="java.lang.Integer">
+    update user_poetry
+    set views=views+1
+    where id=#{id};
+  </update>
+</mapper>

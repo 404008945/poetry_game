@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.poetry.dao.InfoDao">
+  <resultMap id="BaseResultMap" type="com.poetry.entity.Info">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="translate" jdbcType="VARCHAR" property="translate" />
+    <result column="enjoy" jdbcType="VARCHAR" property="enjoy" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="background" jdbcType="VARCHAR" property="background" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from `info`
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.poetry.entity.Info" useGeneratedKeys="true">
+    insert into `info` (translate, enjoy, note, 
+      background, type
+      )
+    values (#{translate,jdbcType=VARCHAR}, #{enjoy,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, 
+      #{background,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.poetry.entity.Info">
+    update `info`
+    set translate = #{translate,jdbcType=VARCHAR},
+      enjoy = #{enjoy,jdbcType=VARCHAR},
+      note = #{note,jdbcType=VARCHAR},
+      background = #{background,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, translate, enjoy, note, background, type
+    from `info`
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, translate, enjoy, note, background, type
+    from `info`
+  </select>
+  <select id="selectByType" parameterType="java.lang.String"   resultMap="BaseResultMap">
+    select * from info
+    where type like concat('%',#{type},'%')
+  </select>
+</mapper>

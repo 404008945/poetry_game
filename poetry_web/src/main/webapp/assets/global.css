@@ -1,0 +1,639 @@
+body {
+    margin: 0;
+}
+
+body ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 2px!important;
+    height: 2px!important;
+}
+
+#main {
+    height: 100%;
+    width: 100%;
+    background-position: right;
+    background-repeat: no-repeat;
+}
+
+#main .ui.menu {
+}
+
+#main .container {
+    height: 100%;
+    width: 100%;
+    /*
+    position: absolute;
+    height: 80%;
+    width: 90%;
+    margin: auto; 
+    left: 0; right: 0; top: 0; bottom: 0;
+    */
+}
+
+#main #grid {
+    height: 100%;
+    background-size: contain;
+    margin: 0!important;
+    background-repeat: no-repeat;
+    background-position: right bottom;
+}
+
+
+#main #grid .zuo, #main #grid .you {
+    height: 100%;
+    padding: 0em;
+}
+
+#main .zuo .cover {
+    height: 80%;
+    width: 80%;
+    background-size: cover;
+    background-position: center center;
+    margin: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+#main .you .you-wrapper {
+    height: 80%;
+    width: 80%;
+    margin: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border: 1px solid #eee;
+    border-top: 0px;
+}
+
+#main .zuo .cover .intro {
+    width: 100%;
+    text-align: center;
+    margin: auto;
+    position: absolute;
+    bottom: 2em;
+    right: 0em;
+}
+
+#main .zuo .cover .inner {
+    background: rgba(0, 0, 0, 0.3686274509803922);
+    color: #fff;
+    width: auto;
+    line-height: 40px;
+    padding: 0em;
+    display: inline-block;
+    font-size: 12px;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+#main .zuo .cover .intro .inner a, .footer a {
+    color: #fff;
+    border-bottom: 1px solid #fff;
+}
+
+#main .zuo .cover .intro .inner a:hover, .footer a:hover {
+    color: #fdf1db;
+}
+
+#main .zuo .intro .left ,#main .zuo .intro .right, #main .zuo .intro .middle{
+    display: inline-block;    
+    color: #fff;
+    line-height: 40px;
+    cursor: pointer;
+    text-align: center;
+}
+
+#main .zuo .intro .middle {
+    padding: 0 1em;
+}
+
+#main .zuo .intro .left {
+    width: 40px;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+}
+
+#main .zuo .intro .right {
+    width: 40px;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+}
+
+
+/* main you */
+#main .you {
+    background: rgba(255, 255, 255, 0.45);
+}
+
+#main .you .progress {
+    height: 5px;
+    background: #aedadd;
+}
+
+#main .you .progress .label {
+    height: 5px;
+    background: #1d5464;
+}
+
+#main .you .today {
+    height: 60px;
+    margin: 0;
+}
+
+#main .you .today .column {
+    padding: 0 1em;
+    line-height: 60px;
+}
+
+#main .you .middle .pinfo {
+    height: 60px;
+    margin: 0;
+}
+
+#main .you .middle .pinfo .column {
+    padding: 0 1em;
+    line-height: 60px;
+}
+
+#main .you .middle {
+    height: calc(100% - (60px + 80px));
+}
+
+
+#main .you .today .yin {
+    text-align: right;
+    font-size: 24px;
+    font-weight: 400;
+    color: #333;
+    opacity: .8;
+    cursor: pointer;
+}
+
+#main .you .today .yang {
+    display: inline-block;
+    font-size: 24px;
+    font-weight: 300;
+    color:#488b8f;
+}
+
+#main .calendar {
+    height: auto;
+    padding: 0px 14px;
+}
+
+#main .footer {
+    background: #333;
+    color: #fff;
+    display: none;
+    padding: 1.2em 0em;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 2px;
+}
+
+#main .menu {
+    background: rgba(0, 0, 0, 0);
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+    margin: 0;
+}
+
+#main .menu .item:first-child {
+    width: calc(14.285% - 2px);
+    border-left: 1px dashed #5D6D7E;
+}
+
+#main .menu .no.item .yang, #main .menu .no.item .yin {
+    opacity: 0.3;
+}
+
+#main .menu .item:last-child {
+    width: calc(14.285% - 2px);
+}
+
+#main .menu .item {
+    color: #333;
+    border-radius: 0!important;
+    cursor: pointer;
+    border-top: 1px dashed #5D6D7E;
+    border-bottom: 1px dashed #5D6D7E;
+    border-right: 1px dashed #5D6D7E;
+    width: calc(14.285% - 1px);
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+
+#main .menu .item:hover {
+    background: rgba(172, 241, 63, 0.41);
+}
+
+#main .menu .active.item {
+    background: rgba(172, 241, 63, 0.41);
+}
+
+#main .menu .yang {
+    padding-top: 10px;
+    font-size: 24px;
+    color: #071e3d;
+}
+
+#main .menu .yin {
+    padding-bottom: 8px;
+    font-size: 14px;
+    color: #ff5959;
+}
+
+#main .menu .active .yang {
+    color: #f05d23;
+}
+
+
+#main .middle {
+}
+
+#main #pcontent-wrapper {
+    height: calc(100% - 60px);
+    overflow: auto;
+}
+
+#main .middle .pinfo .l.column {
+    background: rgba(239, 90, 90, .7);
+}
+
+#main .middle .pinfo .r.column {
+    background: rgba(80, 128, 92, 0.7);
+}
+
+#main .middle .pinfo .title {
+    color: #fff;
+    font-size: 1.315em;
+    white-space:nowrap;text-overflow:ellipsis;
+}
+
+#main .middle .pinfo .author {
+    color: #fff;
+    text-align: right;
+    font-size: 1.315em;
+    white-space:nowrap;text-overflow:ellipsis;
+}
+
+#main #pcontent-grid {
+    height: 100%;
+    margin: 0;
+}
+
+#main #pcontent-grid>.column {
+    padding: 0;
+}
+
+#main #pcontent-wrapper .meta {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.5);
+    width: 100%;
+}
+
+#main .middle .poetry-content {
+    padding: 16px;
+}
+
+
+#main .middle .poetry-content p {
+    color: #333;
+    font-size: 1.315em;
+    font-weight: 300;
+    line-height: 1.8em;
+    letter-spacing: 5px;
+}
+
+#main .you .today #firstLunar, #main .you .today #firstSolar {
+    display: none;
+}
+
+#main .middle .uu {
+    text-align: start;
+    writing-mode: vertical-rl;
+    -moz-writing-mode: vertical-rl;
+    -webkit-writing-mode: vertical-rl;
+    -o-writing-mode: vertical-rl;
+    -ms-writing-mode: tb-rl;
+    _writing-mode: tb-rl;
+}
+
+#main .middle .uu p {
+    line-height: 2em;
+    letter-spacing: 6px;
+}
+
+
+.github-corner:hover .octo-arm {
+  animation: octocat-wave 560ms ease-in-out
+}
+
+@keyframes octocat-wave {
+
+  0%,
+  100% {
+    transform: rotate(0)
+  }
+
+  20%,
+  60% {
+    transform: rotate(-25deg)
+  }
+
+  40%,
+  80% {
+    transform: rotate(10deg)
+  }
+}
+
+@media (max-width:500px) {
+  .github-corner:hover .octo-arm {
+    animation: none
+  }
+
+  .github-corner .octo-arm {
+    animation: octocat-wave 560ms ease-in-out
+  }
+}
+
+/* mobile */
+@media only screen 
+and (min-width : 0px) 
+and (max-width : 1024px) {
+    #grid>.column {
+        width: 100%;
+        padding: 0!important;
+    }
+    #main .zuo .cover {
+        height: 100%;
+        width: 100%;
+    }
+    #main #grid .zuo {
+        height: 300px;
+    }
+
+    #main #grid .you {
+        height: auto!important;
+    }
+
+    #main #pcontent-grid .l.column {
+        width: 100%!important;
+    }
+
+    #main #grid .you-wrapper {
+        position: static; 
+        height: auto;
+        width: 100%;
+        border: 0;
+    }
+
+    #main .you .middle {
+        height: auto;
+    }
+
+    #main #grid {
+        height: auto;
+        background-position: center 300px;
+    }
+
+    #main #pcontent {
+        min-height: 200px;
+        font-size: 16px;
+    }
+
+    #main #pcontent p {
+        line-height: 1.5em;
+        font-size: 16px;
+    }
+
+    #main .you .middle .pinfo {
+        height: auto;
+    }
+
+    #main .middle .pinfo .column {
+        width: calc(50% - 2em)!important;
+        height: auto;
+        padding: 1em;
+        line-height: 40px!important;
+    }
+
+    #main .you .today {
+        height: auto;
+    }
+
+    #main .you .today .column {
+        width: calc(50% - 2em)!important;
+        line-height: 40px!important;
+    }
+
+    #main .middle .pinfo .title {
+        font-size: 16px;
+    }
+
+    #main .middle .pinfo .author {
+        font-size: 16px;
+    }
+
+    #main .you .today .yang {
+        font-size: 18px;
+    }
+
+    #main .you .today .yin {
+        font-size: 18px;
+    }
+
+    #main .menu {
+        height: auto;
+    }
+
+    #main .menu .item .yang {
+        font-size: 16px;
+    }
+
+    #main .menu .item .yino {
+        font-size: 16px;
+    }
+
+    #main .footer {
+        display: block;
+    }
+
+    #main .calendar {
+        padding: 0px;
+    }
+
+    /*
+    #main .menu .item:first-child {
+        border-left: 0;
+        width: calc(14.285% - 1px);
+    }
+
+    #main .menu .item:last-child {
+        border-right: 0;
+        width: calc(14.285% - 1px);
+    }
+    */
+}
+
+/* print */
+@media print and (orientation:portrait) {
+    #main #grid {
+        height: 100%;
+        background-position: center 300px;
+    }
+    #grid>.column {
+        width: 100%;
+    }
+    #main .zuo .cover {
+        height: 100%;
+        width: 100%;
+    }
+    #main #grid .zuo {
+        height: 40%;
+    }
+
+    #main #grid .you {
+        height: 60%;
+    }
+
+    #main #grid .you-wrapper {
+        height: 100%;
+        width: 100%;
+        position: static;
+    }
+
+    #main .you .middle {
+    }
+
+    #main #pcontent {
+        font-size: 18px;
+    }
+
+    #main #pcontent p {
+        font-size: 18px;
+        line-height: 1.2em;
+        font-weight: 400;
+    }
+
+    #main .middle .pinfo .title {
+        font-size: 20px;
+    }
+
+    #main .middle .pinfo .author {
+        font-size: 20px;
+    }
+
+    #main #pcontent-wrapper {
+        height: calc(100% - 60px);
+        overflow: visible;
+        overflow-y: auto;
+    }
+
+    #main .you .today .yang {
+        font-size: 24px;
+    }
+
+    #main .you .today .yin {
+        font-size: 24px;
+        color: #000;
+        font-weight: bold;
+    }
+    #main .zuo .cover .inner, #main .you .today #todayLunar, #main .you .today #todaySolar {
+        display: none; 
+    }
+
+    #main .you .today #firstLunar, #main .you .today #firstSolar {
+        display: block;
+    }
+    #main .you .you-wrapper {
+        border: 0; 
+    }
+
+    #main .you .menu .active {
+        background: rgba(255, 255, 255, 0); 
+    }
+
+    #main .you .menu .yin {
+        font-size: 18px;
+    }
+
+    #main .you .menu .active .yang {
+        color: #071e3d!important;
+    }
+
+    #main .calendar {
+        padding: 0px 0px;
+    }
+}
+
+@media print and (orientation:landscape) {
+    #main .zuo .cover {
+        width: 100%;
+    }
+
+    #main .you .you-wrapper {
+        width: calc(100% - 1px);
+        border-left: 0!important;
+    }
+
+    #main .zuo .cover .inner, #main .you .today #todayLunar, #main .you .today #todaySolar {
+        display: none; 
+    }
+
+    #main .you .today #firstLunar, #main .you .today #firstSolar {
+        display: block;
+        font-size: 18px;
+        padding-left: 1em;
+        padding-right: 1em;
+    }
+
+    /* top today grid */
+
+    #main .today.grid .column {
+        width: 50%!important;
+        padding: 0;
+    }
+
+    #main .pinfo.grid .column {
+        width: calc(50% - 2em)!important;
+    }
+
+    /* font-size */
+    #main .middle .pinfo .title {
+        font-size: 16px;
+    }
+
+    #main .middle .pinfo .author {
+        font-size: 16px;
+    }
+    #main .middle .poetry-content p {
+        font-size: 16px;
+        font-weight: 400;
+    }
+
+    #main .calendar {
+        padding: -1px;
+    }
+    #main .you .menu .active {
+        background: rgba(255, 255, 255, 0); 
+    }
+    #main .you .menu .active .yang {
+        color: #071e3d!important;
+    }
+}
+
+
+@media print {
+    .github-corner {
+        display: none;
+    }
+}

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.poetry.dao.AuthorDao">
+  <resultMap id="BaseResultMap" type="com.poetry.entity.Author">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="dynasty" jdbcType="CHAR" property="dynasty" />
+    <result column="intro" jdbcType="LONGVARCHAR" property="intro" />
+  </resultMap>
+  <select id="selectAllDynasty" resultType="java.lang.String">
+    select distinct dynasty
+    from `author`;
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, `name`, dynasty, intro
+    from `author`
+  </select>
+
+  <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, `name`, dynasty, intro
+    from `author`
+    where id=#{id}
+  </select>
+
+  <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, `name`, dynasty, intro
+    from `author`
+    where `name`=#{name}
+  </select>
+
+  <!--添加作者-->
+  <insert id="insert" parameterType="com.poetry.entity.Author" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    insert into author(`name`,intro,dynasty)
+    values(#{name},#{intro},#{dynasty})
+  </insert>
+</mapper>

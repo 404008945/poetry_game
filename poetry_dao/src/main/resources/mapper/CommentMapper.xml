@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.poetry.dao.CommentDao">
+  <resultMap id="BaseResultMap" type="com.poetry.entity.Comment">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="poetry_id" jdbcType="INTEGER" property="poetryId" />
+    <result column="likes" jdbcType="INTEGER" property="likes" />
+    <result column="user_id" property="userId" />
+    <result column="time" property="time"/>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from `comment`
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.poetry.entity.Comment" useGeneratedKeys="true">
+    insert into `comment` (content, poetry_id,likes,user_id,time)
+    values (#{content,jdbcType=VARCHAR}, #{poetryId,jdbcType=INTEGER},#{likes,jdbcType=INTEGER},#{userId},#{time})
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="java.lang.Integer">
+    update `comment`
+    set likes=likes+1
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, content, poetry_id,likes,user_id,time
+    from `comment`
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, content, poetry_id,likes,user_id,time
+    from `comment`
+  </select>
+
+  <select id="selectByPoetryId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, content, poetry_id,user_id,time,likes
+    from `comment`
+    where poetry_id = #{poetryId,jdbcType=INTEGER}
+    order by `time` desc;
+  </select>
+</mapper>

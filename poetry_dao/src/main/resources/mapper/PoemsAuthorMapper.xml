@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.poetry.dao.PoemsAuthorDao">
+  <resultMap id="BaseResultMap" type="com.poetry.entity.PoemsAuthor">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="intro_l" property="introL" />
+    <result column="intro_s" property="introS" />
+  </resultMap>
+  <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, name,intro_l,intro_s
+    from `poems_author`
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+</mapper>

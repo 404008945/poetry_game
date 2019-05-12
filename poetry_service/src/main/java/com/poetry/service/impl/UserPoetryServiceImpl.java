@@ -17,6 +17,7 @@ public class UserPoetryServiceImpl implements UserPoetryService {
 
     @Autowired
     private UserPoetryDao userPoetryDao;
+
     public int removeByPrimaryKey(Integer id) {
         return userPoetryDao.deleteByPrimaryKey(id);
     }
@@ -32,17 +33,17 @@ public class UserPoetryServiceImpl implements UserPoetryService {
         return userPoetryDao.selectByPrimaryKey(id);
     }
 
-    public PageInfo getAllByTime(int pageNum,int pageSize) {
-        PageHelper.startPage(pageNum,pageSize);
-        List<UserPoetry> userPoetry=userPoetryDao.selectAllByTime();
-        PageInfo pageInfo=new PageInfo(userPoetry);
+    public PageInfo getAllByTime(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<UserPoetry> userPoetry = userPoetryDao.selectAllByTime();
+        PageInfo pageInfo = new PageInfo(userPoetry);
         return pageInfo;
     }
 
     public PageInfo getAllByLikes(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum,pageSize);
-        List<UserPoetry> userPoetry=userPoetryDao.selectAllByLikes();
-        PageInfo pageInfo=new PageInfo(userPoetry);
+        PageHelper.startPage(pageNum, pageSize);
+        List<UserPoetry> userPoetry = userPoetryDao.selectAllByLikes();
+        PageInfo pageInfo = new PageInfo(userPoetry);
         return pageInfo;
     }
 
@@ -50,10 +51,10 @@ public class UserPoetryServiceImpl implements UserPoetryService {
         return userPoetryDao.updateByPrimaryKey(record);
     }
 
-    public PageInfo getByUserId(Integer id,int pageNum,int pageSize) {
-        PageHelper.startPage(pageNum,pageSize);
+    public PageInfo getByUserId(Integer id, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
         List<UserPoetry> list = userPoetryDao.selectByUserId(id);
-        PageInfo pageInfo=new PageInfo(list);
+        PageInfo pageInfo = new PageInfo(list);
         return pageInfo;
     }
 
@@ -73,24 +74,25 @@ public class UserPoetryServiceImpl implements UserPoetryService {
         return userPoetryDao.selectByUserId(userId);
     }
 
-    public int getAllLikesByUserId(Integer id) {
-        int likes=0;
-        List<UserPoetry> list = getByUserId(id);
-        for(UserPoetry userPoetry:list)
-        {
-            likes=likes+userPoetry.getLikes();
-        }
-        return likes;
-    }
 
+    //获取一个用户获得的所有赞
     public int getAllViewsByUserId(Integer id) {
-        int views=0;
+        int views = 0;
         List<UserPoetry> list = getByUserId(id);
-        for(UserPoetry userPoetry:list)
-        {
-            views=views+userPoetry.getViews();
+        for (UserPoetry userPoetry : list) {
+            views = views + userPoetry.getViews();
         }
         return views;
+    }
+
+    //获得所有的赞通过用户id
+    public int getAllLikesByUserId(Integer id) {
+        int likes = 0;
+        List<UserPoetry> list = getByUserId(id);
+        for (UserPoetry userPoetry : list) {
+            likes = likes + userPoetry.getLikes();
+        }
+        return likes;
     }
 
     //获取用户点赞过的所有作品

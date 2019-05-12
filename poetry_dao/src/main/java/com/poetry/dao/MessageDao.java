@@ -7,13 +7,6 @@ import java.util.List;
 
 @Repository
 public interface MessageDao {
-    int deleteByPrimaryKey(Integer id);
-
-    int insert(Message record);
-
-    //查找某个人的未读消息
-    List<Message> selectByUserIdN(Integer id);
-
     //获取未读消息数
     int selectUnreadNum(Integer id);
 
@@ -22,4 +15,11 @@ public interface MessageDao {
 
     //设置消息已读
     int setRead(Integer id);
+
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(Message record);
+
+    //查找某个人的未读消息
+    List<Message> selectByUserIdN(Integer id);
 }

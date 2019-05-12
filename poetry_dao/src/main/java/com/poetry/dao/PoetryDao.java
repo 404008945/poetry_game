@@ -10,6 +10,19 @@ import java.util.List;
 
 @Repository
 public interface PoetryDao {
+    List<Poetry> selectByContent(@Param("content") String content);
+
+    //根据诗词类型和字符查找
+    Poetry selectByChar(@Param("headPoetry") HeadPoetry headPoetry);
+
+    Poetry selectByInfoId(@Param("infoId") Integer infoId);
+
+    //每日推荐
+    Poetry selectByRecommend(@Param("recommend") RecommendDto recommend);
+
+    //添加诗词
+    int insert(Poetry poetry);
+
     //通过Id查询唐宋诗
     Poetry selectById(Integer id);
 
@@ -24,17 +37,5 @@ public interface PoetryDao {
 
     //随机产生一首诗
     Poetry selectOne();
-
-    List<Poetry> selectByContent(@Param("content") String content);
-
-    //根据诗词类型和字符查找
-    Poetry selectByChar(@Param("headPoetry") HeadPoetry headPoetry);
-
-    Poetry   selectByInfoId(@Param("infoId") Integer infoId);
-    //每日推荐
-    Poetry selectByRecommend(@Param("recommend") RecommendDto recommend);
-
-    //添加诗词
-    int insert(Poetry poetry);
 
 }

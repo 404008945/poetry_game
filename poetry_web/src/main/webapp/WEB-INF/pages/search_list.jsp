@@ -69,105 +69,105 @@
             </div>
             <div class="row">
                 <c:if test="${pageInfo.list[0]!=null}">
-                <div class="col-md-4">
-                    <div class="fh5co-portfolio animate-box">
+                    <div class="col-md-4">
+                        <div class="fh5co-portfolio animate-box">
                             <a href="/enjoy/detail_poetry/${pageInfo.list[0].id}" style="border-radius: 15px">
-                            <div class="portfolio-entry" style="border-radius: 15px;background: url('/images/${colors[0]}.jpg') no-repeat;">
-                                <p style="color: #000;text-align:center;padding-top: 115px;font-size: 25px">${pageInfo.list[0].title}</p>
-                                <c:if test="${likes!=null}">
-                                    <p style="color: #000;text-align: center;">相似字符:<span style="color: red">${likes[0]}</span></p>
-                                </c:if>
-                            </div>
-                            <div class="portfolio-text">
-                                <h3 style="text-align:center;">作者——${pageInfo.list[0].author}</h3>
-                            </div>
-                        </a>
+                                <div class="portfolio-entry" style="border-radius: 15px;background: url('/images/${colors[0]}.jpg') no-repeat;">
+                                    <p style="color: #000;text-align:center;padding-top: 115px;font-size: 25px">${pageInfo.list[0].title}</p>
+                                    <c:if test="${likes!=null}">
+                                        <p style="color: #000;text-align: center;">相似字符:<span style="color: red">${likes[0]}</span></p>
+                                    </c:if>
+                                </div>
+                                <div class="portfolio-text">
+                                    <h3 style="text-align:center;">作者——${pageInfo.list[0].author}</h3>
+                                </div>
+                            </a>
+                        </div>
                     </div>
-                </div>
                 </c:if>
                 <c:if test="${pageInfo.list[1]!=null}">
-                <div class="col-md-4">
-                    <div class="fh5co-portfolio animate-box">
-                        <a href="/enjoy/detail_poetry/${pageInfo.list[1].id}" style="border-radius: 15px">
-                            <div class="portfolio-entry" style="border-radius: 15px;background: url('/images/${colors[1]}.jpg') no-repeat">
-                                <p style="color: #000;text-align:center;padding-top: 115px;font-size: 25px">${pageInfo.list[1].title}</p>
-                                <c:if test="${likes!=null}">
-                                    <p style="color: #000;text-align: center;">相似字符:<span style="color: red">${likes[1]}</span></p>
-                                </c:if>
-                            </div>
-                            <div class="portfolio-text">
-                                <h3 style="text-align:center;">作者——${pageInfo.list[1].author}</h3>
-                            </div>
-                        </a>
+                    <div class="col-md-4">
+                        <div class="fh5co-portfolio animate-box">
+                            <a href="/enjoy/detail_poetry/${pageInfo.list[1].id}" style="border-radius: 15px">
+                                <div class="portfolio-entry" style="border-radius: 15px;background: url('/images/${colors[1]}.jpg') no-repeat">
+                                    <p style="color: #000;text-align:center;padding-top: 115px;font-size: 25px">${pageInfo.list[1].title}</p>
+                                    <c:if test="${likes!=null}">
+                                        <p style="color: #000;text-align: center;">相似字符:<span style="color: red">${likes[1]}</span></p>
+                                    </c:if>
+                                </div>
+                                <div class="portfolio-text">
+                                    <h3 style="text-align:center;">作者——${pageInfo.list[1].author}</h3>
+                                </div>
+                            </a>
+                        </div>
                     </div>
-                </div>
                 </c:if>
                 <c:if test="${pageInfo.list[2]!=null}">
-                <div class="col-md-4">
-                    <div class="fh5co-portfolio animate-box">
-                        <a href="/enjoy/detail_poetry/${pageInfo.list[2].id}" style="border-radius: 15px">
-                            <div class="portfolio-entry" style="border-radius: 15px;background: url('/images/${colors[2]}.jpg') no-repeat">
-                                <p style="color: #000;text-align:center;padding-top: 115px;font-size: 25px">${pageInfo.list[2].title}</p>
-                                <c:if test="${likes!=null}">
-                                    <p style="color: #000;text-align: center;">相似字符:<span style="color: red">${likes[2]}</span></p>
-                                </c:if>
-                            </div>
-                            <div class="portfolio-text">
-                                <h3 style="text-align:center;">作者——${pageInfo.list[2].author}</h3>
-                            </div>
-                        </a>
+                    <div class="col-md-4">
+                        <div class="fh5co-portfolio animate-box">
+                            <a href="/enjoy/detail_poetry/${pageInfo.list[2].id}" style="border-radius: 15px">
+                                <div class="portfolio-entry" style="border-radius: 15px;background: url('/images/${colors[2]}.jpg') no-repeat">
+                                    <p style="color: #000;text-align:center;padding-top: 115px;font-size: 25px">${pageInfo.list[2].title}</p>
+                                    <c:if test="${likes!=null}">
+                                        <p style="color: #000;text-align: center;">相似字符:<span style="color: red">${likes[2]}</span></p>
+                                    </c:if>
+                                </div>
+                                <div class="portfolio-text">
+                                    <h3 style="text-align:center;">作者——${pageInfo.list[2].author}</h3>
+                                </div>
+                            </a>
+                        </div>
                     </div>
-                </div>
                 </c:if>
                 <c:if test="${pageInfo.list[3]!=null}">
-                <div class="col-md-4">
-                    <div class="fh5co-portfolio animate-box">
-                        <a href="/enjoy/detail_poetry/${pageInfo.list[3].id}" style="border-radius: 15px">
-                            <div class="portfolio-entry" style="border-radius: 15px;background: url('/images/${colors[3]}.jpg') no-repeat">
-                                <p style="color: #000;text-align:center;padding-top: 115px;font-size: 25px">${pageInfo.list[3].title}</p>
-                                <c:if test="${likes!=null}">
-                                    <p style="color: #000;text-align: center;">相似字符:<span style="color: red">${likes[3]}</span></p>
-                                </c:if>
-                            </div>
-                            <div class="portfolio-text">
-                                <h3 style="text-align:center;">作者——${pageInfo.list[3].author}</h3>
-                            </div>
-                        </a>
+                    <div class="col-md-4">
+                        <div class="fh5co-portfolio animate-box">
+                            <a href="/enjoy/detail_poetry/${pageInfo.list[3].id}" style="border-radius: 15px">
+                                <div class="portfolio-entry" style="border-radius: 15px;background: url('/images/${colors[3]}.jpg') no-repeat">
+                                    <p style="color: #000;text-align:center;padding-top: 115px;font-size: 25px">${pageInfo.list[3].title}</p>
+                                    <c:if test="${likes!=null}">
+                                        <p style="color: #000;text-align: center;">相似字符:<span style="color: red">${likes[3]}</span></p>
+                                    </c:if>
+                                </div>
+                                <div class="portfolio-text">
+                                    <h3 style="text-align:center;">作者——${pageInfo.list[3].author}</h3>
+                                </div>
+                            </a>
+                        </div>
                     </div>
-                </div>
                 </c:if>
                 <c:if test="${pageInfo.list[4]!=null}">
-                <div class="col-md-4">
-                    <div class="fh5co-portfolio animate-box">
-                        <a href="/enjoy/detail_poetry/${pageInfo.list[4].id}" style="border-radius: 15px">
-                            <div class="portfolio-entry" style="border-radius: 15px;background: url('/images/${colors[4]}.jpg') no-repeat">
-                                <p style="color: #000;text-align:center;padding-top: 115px;font-size: 25px">${pageInfo.list[4].title}</p>
-                                <c:if test="${likes!=null}">
-                                    <p style="color: #000;text-align: center;">相似字符:<span style="color: red">${likes[4]}</span></p>
-                                </c:if>
-                            </div>                            <div class="portfolio-text">
+                    <div class="col-md-4">
+                        <div class="fh5co-portfolio animate-box">
+                            <a href="/enjoy/detail_poetry/${pageInfo.list[4].id}" style="border-radius: 15px">
+                                <div class="portfolio-entry" style="border-radius: 15px;background: url('/images/${colors[4]}.jpg') no-repeat">
+                                    <p style="color: #000;text-align:center;padding-top: 115px;font-size: 25px">${pageInfo.list[4].title}</p>
+                                    <c:if test="${likes!=null}">
+                                        <p style="color: #000;text-align: center;">相似字符:<span style="color: red">${likes[4]}</span></p>
+                                    </c:if>
+                                </div>                            <div class="portfolio-text">
                                 <h3 style="text-align:center;">作者——${pageInfo.list[4].author}</h3>
                             </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
-                </div>
                 </c:if>
                 <c:if test="${pageInfo.list[5]!=null}">
-                <div class="col-md-4">
-                    <div class="fh5co-portfolio animate-box">
+                    <div class="col-md-4">
+                        <div class="fh5co-portfolio animate-box">
                             <a href="/enjoy/detail_poetry/${pageInfo.list[5].id}" style="border-radius: 15px">
-                            <div class="portfolio-entry" style="border-radius: 15px;background: url('/images/${colors[5]}.jpg') no-repeat">
-                                <p style="color: #000;text-align:center;padding-top: 115px;font-size: 25px">${pageInfo.list[5].title}</p>
-                                <c:if test="${likes!=null}">
-                                    <p style="color: #000;text-align: center;">相似字符:<span style="color: red">${likes[5]}</span></p>
-                                </c:if>
-                            </div>
-                            <div class="portfolio-text">
-                                <h3 style="text-align:center;">作者——${pageInfo.list[5].author}</h3>
-                            </div>
-                        </a>
+                                <div class="portfolio-entry" style="border-radius: 15px;background: url('/images/${colors[5]}.jpg') no-repeat">
+                                    <p style="color: #000;text-align:center;padding-top: 115px;font-size: 25px">${pageInfo.list[5].title}</p>
+                                    <c:if test="${likes!=null}">
+                                        <p style="color: #000;text-align: center;">相似字符:<span style="color: red">${likes[5]}</span></p>
+                                    </c:if>
+                                </div>
+                                <div class="portfolio-text">
+                                    <h3 style="text-align:center;">作者——${pageInfo.list[5].author}</h3>
+                                </div>
+                            </a>
+                        </div>
                     </div>
-                </div>
                 </c:if>
             </div>
         </div>

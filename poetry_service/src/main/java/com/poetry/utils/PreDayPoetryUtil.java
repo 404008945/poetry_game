@@ -12,17 +12,19 @@ import java.util.Arrays;
 public class PreDayPoetryUtil {
     //获取每日一句
     private static PoetryService service;
-    public static PoetryInfo getPoetry()
+    public static PoetryInfo getPoetry(Boolean type)
     {
         //产生随机一首诗
         ApplicationContext context=new ClassPathXmlApplicationContext("spring-service.xml");
         service=context.getBean(PoetryService.class);
         Poetry p = service.getOne();
         String content = p.getContent();
-        String[] split = content.split("\r\n");
-        System.out.println("数组:"+Arrays.toString(split));
+        if(content.charAt(content.length()-1)=='~')
+        {
+            content=content.substring(0,content.length()-1);
+        }
+        String[] split = content.split("\r\n");//按照这个进行分割
         PoetryInfo poetryInfo=new PoetryInfo();
-        System.out.println("内容:"+content);
         poetryInfo.setOne(split[0]);
         if(split.length==1)
         {

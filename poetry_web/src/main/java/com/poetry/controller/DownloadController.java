@@ -21,18 +21,19 @@ public class DownloadController {
 
     @Autowired
     private UserService userService;
-    @RequestMapping(value="/downloadImg")
-    public ResponseEntity<byte[]> download(@RequestParam("imgSrc") String imgSrc, HttpServletRequest request) throws IOException, InterruptedException{
-//	System.out.println(musicService.selectByPrimaryKey(id));
-        //
-        String path=	request.getServletContext().getRealPath("/image/");
-        String fileName=imgSrc;///获取到图片的
-        System.out.println(fileName);
-        String downloadName=fileName;//采用相同的名字
-        File file=new File(path,fileName);
-        HttpHeaders headers=new HttpHeaders();
+
+    @RequestMapping(value = "/downloadImg")
+    public ResponseEntity<byte[]> download(@RequestParam("imgSrc")
+                                                   String imgSrc, HttpServletRequest request)
+            throws IOException, InterruptedException {
+
+        String path = request.getServletContext().getRealPath("/image/");
+        String fileName = imgSrc;///获取到图片的
+        String downloadName = fileName;//采用相同的名字
+        File file = new File(path, fileName);
+        HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", new String(downloadName.getBytes("UTF-8"),"iso-8859-1"));
-        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),headers, HttpStatus.CREATED);
+        headers.setContentDispositionFormData("attachment", new String(downloadName.getBytes("UTF-8"), "iso-8859-1"));
+        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
     }
 }

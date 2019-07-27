@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.poetry.dto.CommentDto;
 import com.poetry.dto.PoetryDto;
 import com.poetry.dto.PoetrySquareDto;
+import com.poetry.dto.RequestDto;
 import com.poetry.entity.*;
 import com.poetry.service.*;
 import com.poetry.utils.PoetryUtils;
@@ -49,6 +50,9 @@ public class UserPoetryController {
     @Autowired
     private Poetry1Service poetry1Service;
 
+    @Autowired
+    private FriendService friendService;
+
     //跳转写诗界面
     @RequestMapping("/writePage")
     public String writePage() {
@@ -70,28 +74,26 @@ public class UserPoetryController {
 
     //进入诗词广场
     @RequestMapping("/poetrySquare/{page}")
-    public String listPage( @PathVariable("page") Integer page, Model model,HttpServletRequest request) {
+    public String listPage(@PathVariable("page") Integer page, Model model, HttpServletRequest request) {
         String type = request.getParameter("type");
-        if(type!=null)
-        {
+        if (type != null) {
             //第一次分类搜索
-            request.getSession().setAttribute("type",type);
-        }else {
-            type= (String) request.getSession().getAttribute("type");
+            request.getSession().setAttribute("type", type);
+        } else {
+            type = (String) request.getSession().getAttribute("type");
         }
         //用来保存每首诗的前几句
         List<PoetrySquareDto> poetrySquareDtos = new ArrayList<>();
         PoetrySquareDto poetrySquareDto;
         List<String> strings = new ArrayList<>();
         List<String> userNames = new ArrayList<>();
-        PageInfo pageInfo=null;
-        if(type.equals("0"))
-        {
+        PageInfo pageInfo = null;
+        if (type.equals("0")) {
             //按时间搜索
             pageInfo = userPoetryService.getAllByTime(page, 6);
-        }else if(type.equals("1")) {
+        } else if (type.equals("1")) {
             //按热度搜索
-            pageInfo=userPoetryService.getAllByLikes(page,6);
+            pageInfo = userPoetryService.getAllByLikes(page, 6);
         }
         List<UserPoetry> userPoetryList = pageInfo.getList();
         int a = 0;
@@ -122,7 +124,7 @@ public class UserPoetryController {
         PoetryDto poetryDto = new PoetryDto();
         UserPoetry userPoetry = userPoetryService.getByPrimaryKey(id);
         Integer userId = userPoetry.getUserId();
-        model.addAttribute("userId",userId);
+        model.addAttribute("userId", userId);
         //该诗的作者
         User author = userService.getByPrimaryKey(userPoetry.getUserId());
         User user = (User) request.getSession().getAttribute("user");
@@ -248,7 +250,7 @@ public class UserPoetryController {
         }
         model.addAttribute("poetrySquareDtos", poetrySquareDtos);
         model.addAttribute("pageInfo", pageInfo);
-        model.addAttribute("title", "欢迎来到" + user.getUsername() + "的诗词世界");
+        model.addAttribute("title", "欢迎来到&nbsp;&lt;" + user.getUsername() + "&gt;&nbsp;的诗词世界");
         model.addAttribute("content", "春风十里不如你,三里桃花不及卿。");
         model.addAttribute("userId", id);
         return "user_poetry_list";
@@ -329,6 +331,10 @@ public class UserPoetryController {
         List<Message> messagesY = messageService.getByUserIdY(user.getId());
         model.addAttribute("messagesY", messagesY);
         messageService.setRead(user.getId());
+
+        //添加验证消息
+        List<RequestDto> requestDtos = friendService.getRequest(user.getAccount());
+        model.addAttribute("requestMessage",requestDtos);
         return "message";
     }
 
@@ -351,18 +357,13 @@ public class UserPoetryController {
             }
         }
         if (acc != null && !acc.equals("") && psw != null && !psw.equals("")) {
-
             User user = userService.getByAccount(acc);
             if (user.getPassword().equals(psw)) {
-                int count = messageService.getUnreadNum(user.getId());
-                req.getSession().setAttribute("messageNum", count);
+                int count1 = messageService.getUnreadNum(user.getId());
+                int count2 = friendService.getRequestCount(user.getAccount());
+                req.getSession().setAttribute("messageNum", count1 + count2);
                 req.getSession().setAttribute("user", user);
-
             }
-
-
         }
-
-
     }
 }

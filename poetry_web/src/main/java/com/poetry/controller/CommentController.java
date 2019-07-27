@@ -27,33 +27,26 @@ public class CommentController {
     private LikesForPoetryService likesForPoetryService;
 
 
-    @RequestMapping(value="/submit",method= RequestMethod.POST)
-    public String comment( CommentForPoetry commentForPoetry){//自动注入评论对象
+    @RequestMapping(value = "/submit", method = RequestMethod.POST)
+    public String comment(CommentForPoetry commentForPoetry) {//自动注入评论对象
         //需要诗的id用户的id
-        System.out.println(commentForPoetry.getContent());
         commentForPoetry.setTime(new Date());
         commentForPoetryService.insert(commentForPoetry);
-
-        return "redirect:/enjoy/detail_poetry/"+commentForPoetry.getPoetryId();
+        return "redirect:/enjoy/detail_poetry/" + commentForPoetry.getPoetryId();
     }
 
-    @RequestMapping(value="/dofavor",method= RequestMethod.POST )
-    public  void favor(@RequestParam("pid") Integer  pid,@RequestParam("like")Boolean like, HttpServletRequest request)//拿到连个id建立关系即可
+    @RequestMapping(value = "/dofavor", method = RequestMethod.POST)
+    public void favor(@RequestParam("pid") Integer pid, @RequestParam("like") Boolean like, HttpServletRequest request)//拿到连个id建立关系即可
     {
 
-        System.out.println(pid+"   "+like);
         int uid = ((User) request.getSession().getAttribute("user")).getId();
-        if(like) {
+        if (like) {
             LikesForPoetry likes = new LikesForPoetry();
             likes.setPoetryId(pid);
             likes.setUserId(uid);
             this.likesForPoetryService.insert(likes);
-        }else
-        {
-            likesForPoetryService.deleteByPrimaryKey(likesForPoetryService.selectByInfo(uid,pid).getId());
+        } else {
+            likesForPoetryService.deleteByPrimaryKey(likesForPoetryService.selectByInfo(uid, pid).getId());
         }
-
-
-
     }
 }

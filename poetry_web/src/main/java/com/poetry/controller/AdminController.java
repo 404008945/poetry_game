@@ -40,6 +40,9 @@ public class AdminController {
     @Autowired
     private AuthorService authorService;
 
+    @Autowired
+    private FriendService friendService;
+
     //跳到后台管理界面
     @RequestMapping("/main")
     public String index() {
@@ -48,48 +51,45 @@ public class AdminController {
 
     //跳到诗词完善
     @RequestMapping("/poetryAdd/{page}")
-    public String poetryAdd(@PathVariable("page")Integer page, Model model) {
+    public String poetryAdd(@PathVariable("page") Integer page, Model model) {
         PageInfo pageInfo = poetryAddService.getAll(page, 3);
-        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("pageInfo", pageInfo);
         return "admin_poetry";
     }
 
     //删除反馈
     @RequestMapping("/poetryAdd/remove/{id}")
-    public String poetryAddRemove(@PathVariable("id")Integer id)
-    {
+    public String poetryAddRemove(@PathVariable("id") Integer id) {
         poetryAddService.remove(id);
         return "redirect:/admin/poetryAdd/1";
     }
 
     //跳到添加古诗界面
     @RequestMapping("/poetryAdd/addPage")
-    public String poetryAddInsertPage()
-    {
+    public String poetryAddInsertPage() {
         return "poetry_add_2";
     }
 
     @RequestMapping("/poetryAdd/add")
-    public String poetryAddInsert(HttpServletRequest request,Model model)
-    {
-        String title=request.getParameter("title");
-        String content=request.getParameter("content");
-        String author=request.getParameter("author");
-        String background=request.getParameter("background");
-        String enjoy=request.getParameter("enjoy");
-        String note=request.getParameter("note");
-        String translate=request.getParameter("translate");
-        String type=request.getParameter("type");
-        String dynasty=request.getParameter("dynasty");
-        String intro=request.getParameter("intro");
+    public String poetryAddInsert(HttpServletRequest request, Model model) {
+        String title = request.getParameter("title");
+        String content = request.getParameter("content");
+        String author = request.getParameter("author");
+        String background = request.getParameter("background");
+        String enjoy = request.getParameter("enjoy");
+        String note = request.getParameter("note");
+        String translate = request.getParameter("translate");
+        String type = request.getParameter("type");
+        String dynasty = request.getParameter("dynasty");
+        String intro = request.getParameter("intro");
         //添加作者
-        Author author1=new Author();
+        Author author1 = new Author();
         author1.setDynasty(dynasty);
         author1.setIntro(intro);
         author1.setName(author);
         authorService.add(author1);
         //添加详情
-        Info info=new Info();
+        Info info = new Info();
         info.setBackground(background);
         info.setEnjoy(enjoy);
         info.setTranslate(translate);
@@ -97,7 +97,7 @@ public class AdminController {
         info.setType(type);
         infoService.add(info);
         //添加诗词
-        Poetry poetry=new Poetry();
+        Poetry poetry = new Poetry();
         poetry.setAuthor(author);
         poetry.setTitle(title);
         poetry.setContent(content);
@@ -135,7 +135,6 @@ public class AdminController {
     public String editUser(@PathVariable("id") Integer id, User user, Model model) {
         user.setId(id);
         userService.editByPrimaryKey(user);
-        System.out.println(user);
         return "redirect:/admin/userPage/1";
     }
 
@@ -150,7 +149,6 @@ public class AdminController {
             for (int i = 0; i < cookies.length; i++) {
                 Cookie cookie = cookies[i];
                 if (cookie.getName().equals("account")) {
-                    //  Long lastAccessTime =Long.parseLong(tcookie.geValue());
                     acc = cookie.getValue();
                 } else if (cookie.getName().equals("password")) {
                     psw = cookie.getValue();
@@ -158,13 +156,12 @@ public class AdminController {
             }
         }
         if (acc != null && !acc.equals("") && psw != null && !psw.equals("")) {
-
             User user = userService.getByAccount(acc);
             if (user.getPassword().equals(psw)) {
-                int count = messageService.getUnreadNum(user.getId());
-                req.getSession().setAttribute("messageNum", count);
+                int count1 = messageService.getUnreadNum(user.getId());
+                int count2 = friendService.getRequestCount(user.getAccount());
+                req.getSession().setAttribute("messageNum", count1 + count2);
                 req.getSession().setAttribute("user", user);
-
             }
         }
     }

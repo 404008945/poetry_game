@@ -1,10 +1,7 @@
 package com.poetry.controller;
 
 import com.poetry.entity.User;
-import com.poetry.service.MessageService;
-import com.poetry.service.PoetryService;
-import com.poetry.service.QuestionService;
-import com.poetry.service.UserService;
+import com.poetry.service.*;
 import com.poetry.service.impl.QuestionServiceImpl;
 import com.poetry.websocket.MySocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +25,11 @@ public class QuestionController {
     private QuestionService questionService;
     @Autowired
     private MySocketHandler mySocketHandler;
+    @Autowired
+    private FriendService friendService;
 
     @RequestMapping("/page")
     public String test() {
-
-        System.out.println(questionService.selectByPrimaryKey(1));
-        System.out.println(questionService.selectByRandom());
         return "hello";
     }
 
@@ -41,7 +37,6 @@ public class QuestionController {
     public String startPage(Model model) {
         int count = mySocketHandler.getCount();
         model.addAttribute("count", count);
-        System.out.println(count);
         return "mainStart";
     }
 
@@ -69,8 +64,9 @@ public class QuestionController {
             if (acc != null && !acc.equals("") && psw != null && !psw.equals("")) {
                 User user = userService.getByAccount(acc);
                 if (user.getPassword().equals(psw)) {
-                    int count = messageService.getUnreadNum(user.getId());
-                    req.getSession().setAttribute("messageNum", count);
+                    int count1 = messageService.getUnreadNum(user.getId());
+                    int count2 = friendService.getRequestCount(user.getAccount());
+                    req.getSession().setAttribute("messageNum", count1 + count2);
                     req.getSession().setAttribute("user", user);
                 }
             }

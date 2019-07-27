@@ -53,18 +53,18 @@
                 <h2>登录</h2>
                 <p style="font-size: 17px;color: #dd356e">${error}</p>
                 <div class="form-group">
-                    <label for="username">账户名</label>
-                    <input type="text" value="${user.account}" class="form-control" required="required" name="account" id="username" placeholder="请输入用户名" autocomplete="off">
+                    <label for="username" style="color: #000000;font-size:20px; ">账户名</label>
+                    <input type="text" value="${user.account}" class="form-control" required="required" name="account" id="username" placeholder="请输入账户名或注册时的手机号" autocomplete="off">
                 </div>
                 <div class="form-group">
-                    <label for="password">密码</label>
+                    <label for="password" style="color: #000000;font-size:20px; ">密码</label>
                     <input type="password" class="form-control" value="${user.password}" required="required" name="password" id="password" placeholder="请输入密码" autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label for="remember"><input type="checkbox" checked name="remember" id="remember">记住我</label>
                 </div>
                 <div class="form-group">
-                    <a href="/registerPage">注册</a> | <a href="/forgetPage">忘记密码?</a>
+                    <p style="font-size: 20px;">没有账号请<a href="/registerPage" style="color:#33cccc;">注册</a></p>
                 </div>
                 <div class="form-group">
                     <div class="verify-wrap form-group" id="verify-wrap"></div>
@@ -74,7 +74,6 @@
                 </div>
             </form>
             <!-- END Sign In Form -->
-
         </div>
     </div>
     <div class="row" style="padding-top:80px; clear: both;">
@@ -95,7 +94,6 @@
 <script src="/js/jq-slideVerify.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
     $(function(){
-        console.log(parseFloat('1px'))
         var SlideVerifyPlug = window.slideVerifyPlug;
         var slideVerify = new SlideVerifyPlug('#verify-wrap',{
             //wrapWidth:'450',//设置 容器的宽度 ,不设置的话，会设置成100%，需要自己在外层包层div,设置宽度，这是为了适应方便点；
@@ -107,7 +105,6 @@
                 {
                     $("#btn").attr("disabled", false);
                 }
-                console.log(res);
             }
         });
         $("#resetBtn").on('click',function(){

@@ -14,9 +14,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>极简诗社</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Free HTML5 Website Template by freehtml5.co" />
-    <meta name="keywords" content="free website templates, free html5, free template, free bootstrap, free website template, html5, css3, mobile first, responsive" />
-    <meta name="author" content="freehtml5.co" />
+    <meta name="description" content="Free HTML5 Website Template by freehtml5.co"/>
+    <meta name="keywords"
+          content="free website templates, free html5, free template, free bootstrap, free website template, html5, css3, mobile first, responsive"/>
+    <meta name="author" content="freehtml5.co"/>
 
     <!-- Facebook and Twitter integration -->
     <meta property="og:title" content=""/>
@@ -24,10 +25,10 @@
     <meta property="og:url" content=""/>
     <meta property="og:site_name" content=""/>
     <meta property="og:description" content=""/>
-    <meta name="twitter:title" content="" />
-    <meta name="twitter:image" content="" />
-    <meta name="twitter:url" content="" />
-    <meta name="twitter:card" content="" />
+    <meta name="twitter:title" content=""/>
+    <meta name="twitter:image" content=""/>
+    <meta name="twitter:url" content=""/>
+    <meta name="twitter:card" content=""/>
 </head>
 <body style="background-color: #d7f7f5">
 
@@ -38,7 +39,7 @@
     <div id="fh5co-contact">
         <div class="container">
             <div class="row animate-box" style="margin-top:100px">
-                <div class="col-md-8 col-md-offset-2 text-center fh5co-heading" >
+                <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
                     <c:forEach var="item" items="${poetryArray}">
                         <span class="item" style="text-align:center; font-weight:lighter;font-size: 30px">${item}</span>
                     </c:forEach>
@@ -54,14 +55,14 @@
 </div>
 <script>
     function changeDivWidth() {
-        var w=document.documentElement.clientWidth;
-        if(w<500)
-        {
-            $(".item").css({'font-size':'19px'})
-        }else{
-            $(".item").css({'font-size':'30px'})
+        var w = document.documentElement.clientWidth;
+        if (w < 500) {
+            $(".item").css({'font-size': '19px'})
+        } else {
+            $(".item").css({'font-size': '30px'})
         }
     }
+
     changeDivWidth();
 </script>
 </body>

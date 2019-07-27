@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.poetry.dao.FriendDao">
+    <resultMap id="BaseResultMap" type="com.poetry.entity.Friend">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="from_user" jdbcType="VARCHAR" property="fromUser"/>
+        <result column="to_user" jdbcType="VARCHAR" property="toUser"/>
+        <result column="check" jdbcType="BIT" property="check"/>
+        <result column="date" jdbcType="TIMESTAMP" property="date"/>
+        <result column="message" jdbcType="VARCHAR" property="message"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from `friend`
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.poetry.entity.Friend"
+            useGeneratedKeys="true">
+    insert into `friend` (from_user, to_user, `check`,
+      `date`,message)
+    values (#{fromUser,jdbcType=VARCHAR}, #{toUser,jdbcType=VARCHAR}, #{check,jdbcType=BIT}, 
+      #{date,jdbcType=TIMESTAMP},#{message,jdbcType=VARCHAR})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.poetry.entity.Friend">
+    update `friend`
+    set from_user = #{fromUser,jdbcType=VARCHAR},
+      to_user = #{toUser,jdbcType=VARCHAR},
+      `check` = #{check,jdbcType=BIT},
+      `date` = #{date,jdbcType=TIMESTAMP},
+      message=#{message,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, from_user, to_user, `check`, `date`,message
+    from `friend`
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select id, from_user, to_user, `check`, `date`,message
+    from `friend`
+  </select>
+    <select id="selectFriends" resultType="java.lang.String" parameterType="java.lang.String">
+    select from_user as account
+    from friend
+    where to_user=#{account} and `check`=1
+    UNION
+    select to_user as account
+    from friend
+    where from_user=#{account} and `check`=1
+  </select>
+    <select id="selectRequest" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select * from friend
+        where to_user=#{account} and `check`=0;
+    </select>
+    <select id="selectRequestCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*)
+        from friend
+        where to_user=#{account} and `check`=0;
+    </select>
+    <select id="judgeFriends" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT count(*) FROM friend WHERE
+	   (
+		to_user = #{account1}
+		AND from_user = #{account2}
+		AND `check` = 1
+	   )
+    OR (
+	to_user = #{account2}
+	AND from_user = #{account1}
+	AND `check` = 1
+    )
+    </select>
+</mapper>

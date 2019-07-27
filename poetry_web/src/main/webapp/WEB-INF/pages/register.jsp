@@ -65,7 +65,7 @@
                     <p style="font-size: 17px;color: #dd356e">${error.defaultMessage}</p>
                 </c:forEach>
                 <div class="form-group">
-                    <div class="alert alert-success" role="alert">请输入注册信息</div>
+                    <div class="alert alert-success" role="alert">请输入注册信息 <span style="margin-left:30%">嫌太麻烦？<a href="/fastReg">使用一键注册</a></span></div>
                 </div>
                 <div class="form-group">
                     <label for="account" style="color: #000000;font-size:20px; " >账号</label>
@@ -94,7 +94,7 @@
                 </div>
 
                 <div class="form-group" >
-                    <p style="font-size: 17px">已经注册? <a href="index2.html" style="color: #33cccc;font-size: 17px">登录</a></p>
+                    <p style="font-size: 17px">已经注册? <a href="loginPage" style="color: #33cccc;font-size: 17px">登录</a></p>
                 </div>
                 <div class="form-group" style="text-align:center;">
                     <input type="submit" id="btn" value="注册" class="btn btn-primary">
@@ -125,9 +125,11 @@
                     if(data=='true')
                     {
                         $("#text").html("该账号可以被注册");
+                        $("#btn").attr("disabled",false);
                     }else if(data=='false'){
                         $("#text").html("该账号已经被注册，换一个吧");
                         $("#btn").attr("disabled",true);
+
                     }
                 }
             });

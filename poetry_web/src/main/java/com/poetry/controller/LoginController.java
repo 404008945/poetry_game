@@ -1,16 +1,14 @@
 package com.poetry.controller;
 
 import com.poetry.entity.*;
+import com.poetry.global.ConstantValue;
 import com.poetry.service.*;
-import com.sun.deploy.net.HttpRequest;
-import com.sun.deploy.net.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -42,28 +40,31 @@ public class LoginController {
     @Autowired
     private MessageService messageService;
 
+    @Autowired
+    private AuthorService authorService;
+
+    @Autowired
+    private FriendService friendService;
+
     //进入登录界面
     @RequestMapping("/loginPage")
     public String loginPage(Model model, HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
-        if(cookies!=null) {
-            User user = new User();
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("account")) {
-                    user.setAccount(cookie.getValue());
-                } else if (cookie.getName().equals("password")) {
-                    user.setPassword(cookie.getValue());
-                }
+        User user = new User();
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("account")) {
+                user.setAccount(cookie.getValue());
+            } else if (cookie.getName().equals("password")) {
+                user.setPassword(cookie.getValue());
             }
-            model.addAttribute("user", user);
         }
+        model.addAttribute("user", user);
         return "login";
     }
 
     //登录
     @RequestMapping("/login")
     public String login(User user, HttpServletRequest request, HttpServletResponse response, Model model) {
-        System.out.println(user);
         User login = loginService.login(user.getAccount(), user.getPassword());
         if (login != null) {
             request.getSession().setAttribute("user", login);
@@ -96,8 +97,9 @@ public class LoginController {
                 return "redirect:/user/writePage";
             }
             //将消息个数放到session中
-            int count = messageService.getUnreadNum(login.getId());
-            request.getSession().setAttribute("messageNum", count);
+            int count1 = messageService.getUnreadNum(login.getId());
+            int count2 = friendService.getRequestCount(login.getAccount());
+            request.getSession().setAttribute("messageNum", count1 + count2);
             return "redirect:/enjoy/index";
         }
         //把错误密码清除掉
@@ -143,8 +145,9 @@ public class LoginController {
                 user.setImage(newFileName);
                 userService.insert(user);
                 model.addAttribute("user", user);
-                //跳转到登录界面
-                return "login";
+                //注册完跳转到个性化界面
+                request.getSession().setAttribute("userId", user.getId());
+                return "redirect:/choosePage";
             } else {
                 //两次密码不一样
                 model.addAttribute("users", user);
@@ -152,6 +155,40 @@ public class LoginController {
                 return "register";
             }
         }
+    }
+
+    @RequestMapping("/choosePage")
+    public String choosePage(Model model, HttpServletRequest request) {
+        //选择所有的作者，诗词类型，朝代
+        List<Author> authors = authorService.getAllAuthor();
+        List<String> dynasty = authorService.getAllDynasty();
+        List<String> category = ConstantValue.getAllCategory();
+        model.addAttribute("authors", authors);
+        model.addAttribute("dynasty", dynasty);
+        model.addAttribute("category", category);
+        return "choose";
+    }
+
+    //保存用户选择的个性化选项
+    @RequestMapping("/choose_enjoy")
+    public String choose(HttpServletRequest request, Model model) {
+        Integer id = (Integer) request.getSession().getAttribute("userId");
+        //诗词类型
+        String type = request.getParameter("type");
+        //作者id
+        Integer authorId = Integer.valueOf(request.getParameter("authorId"));
+        //朝代
+        String dynasty = request.getParameter("dynasty");
+        //更新用户信息
+        User user = new User();
+        user.setId(id);
+        user.setLikeType(type);
+        user.setLikeAuthorId(authorId);
+        user.setLikeDynasty(dynasty);
+        userService.editByPrimaryKey(user);
+        User user1 = userService.getByPrimaryKey(id);
+        request.getSession().setAttribute("user", user1);
+        return "redirect:/enjoy/index";
     }
 
     //使用ajax判断账户名是否已经被注册
@@ -218,6 +255,9 @@ public class LoginController {
         //计算作品总点赞量
         likesNum = userPoetryService.getAllLikesByUserId(user.getId());
         model.addAttribute("likesNum", likesNum);
+        //用户喜欢的作者
+        String authorName = authorService.getById(user.getLikeAuthorId()).getName();
+        model.addAttribute("authorName", authorName);
         return "info";
     }
 
@@ -289,30 +329,34 @@ public class LoginController {
 
     //删除用户诗词
     @RequestMapping("/poetry/delete/{id}")
-    public String deletePoetry(@PathVariable("id")Integer id)
-    {
+    public String deletePoetry(@PathVariable("id") Integer id) {
         userPoetryService.removeByPrimaryKey(id);
         return "redirect:/zone";
     }
 
     //跳转到修改用户诗词界面
     @RequestMapping("/poetry/editPage/{id}")
-    public String editPoetryPage(@PathVariable("id")Integer id,Model model)
-    {
+    public String editPoetryPage(@PathVariable("id") Integer id, Model model) {
         UserPoetry poetry = userPoetryService.getByPrimaryKey(id);
-        model.addAttribute("poetry",poetry);
+        model.addAttribute("poetry", poetry);
         return "edit_poetry";
     }
 
     //修改用户诗词
     @RequestMapping("/poetry/edit/{id}")
-    public String editPoetry(@PathVariable("id")Integer id,UserPoetry poetry,Model model)
-    {
+    public String editPoetry(@PathVariable("id") Integer id, UserPoetry poetry, Model model) {
         poetry.setId(id);
         poetry.setTime(new Date());
         userPoetryService.editByPrimaryKey(poetry);
         return "redirect:/zone";
     }
+
+    //快速注册
+    @RequestMapping("/fastReg")
+    public String fastReg(Model model) {
+        return "fast_reg";
+    }
+
 
     @ModelAttribute  //所有controller执行前都要执行他
     public void dealCookie(HttpServletRequest req, HttpServletResponse resp) {
@@ -331,21 +375,15 @@ public class LoginController {
                     psw = cookie.getValue();
                 }
             }
-            if (acc != null && !acc.equals("") && psw != null && !psw.equals("")) {
-
-                User user = userService.getByAccount(acc);
-                if (user.getPassword().equals(psw)) {
-                    int count = messageService.getUnreadNum(user.getId());
-                    req.getSession().setAttribute("messageNum", count);
-                    req.getSession().setAttribute("user", user);
-
-                }
-
-
-            }
-
         }
-
-
+        if (acc != null && !acc.equals("") && psw != null && !psw.equals("")) {
+            User user = userService.getByAccount(acc);
+            if (user.getPassword().equals(psw)) {
+                int count1 = messageService.getUnreadNum(user.getId());
+                int count2 = friendService.getRequestCount(user.getAccount());
+                req.getSession().setAttribute("messageNum", count1 + count2);
+                req.getSession().setAttribute("user", user);
+            }
+        }
     }
 }

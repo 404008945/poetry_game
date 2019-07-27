@@ -21,7 +21,6 @@
       <meta name="twitter:url" content="" />
       <meta name="twitter:card" content="" />
       <style type="text/css">
-
       </style>
   </head>
   <body style="background-color: #eaf5ff">
@@ -83,7 +82,7 @@
   <!-- Main -->
   <script src="/js/main.js"></script>
   <script>
-      $("button").css({'background-color':'#87c0cd'})
+      $("button").css({'background-color':'#87c0cd'});
       function changeDivWidth() {
           var w=document.documentElement.clientWidth;
           if(w<500)

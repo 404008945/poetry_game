@@ -3,6 +3,7 @@ package com.poetry.websocket;
 
 import com.poetry.entity.User;
 import com.poetry.game.GameControll;
+import com.poetry.game.OnlineUserOperator;
 import com.poetry.game.Player;
 import net.sf.json.JSONObject;
 import org.aspectj.apache.bcel.util.Play;
@@ -13,21 +14,27 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 public class MySocketHandler extends TextWebSocketHandler {   // handler需要拿到单例游戏类
     @Autowired
     private GameControll gameControll;    //此类会触发游戏控制类的一些操作
     //线上人数
+    @Autowired
+    private OnlineUserOperator onlineUserOperator;
+
     private static int count;
     private static List<WebSocketSession> set = new ArrayList<WebSocketSession>();
     private WebSocketSession session;
-
     //确立连接后`
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         User user = (User) session.getAttributes().get("user");
         System.out.println(user);
+        //所有用户都需要加入到在线队列中
         try {
             boolean exits = false;
             for (int i = 0; i < gameControll.getRooms().size(); i++) {
@@ -40,12 +47,16 @@ public class MySocketHandler extends TextWebSocketHandler {   // handler需要�
                     }
                 }
             }
+
             if (!exits) {
-                Player plyer = new Player();
+                //根据user从全部玩家中获取到piayer
+                //无论如何  用户都在在线的集合中
+                int index = onlineUserOperator.isExists(user);
+                Player plyer = onlineUserOperator.get(user.getAccount());//再也不用重新设置player  只需要重新刷新session即可
                 plyer.setName("小鱼儿");//新连接创立时创建新用户的情况
                 plyer.setSession(session);
                 plyer.setUser(user);//间接从httpSession中得到的user对象
-                this.gameControll.addPlayer1(plyer);
+                this.gameControll.addPlayer1(plyer); //添加用户到队列中
             }
             //添加进入等待游戏的队列
         } catch (Exception e) {
@@ -53,7 +64,6 @@ public class MySocketHandler extends TextWebSocketHandler {   // handler需要�
         }
         //添加人数
         addCount();
-        System.out.println("目前连接人数:" + getOnlineCount());
     }
 
     //处理信息
@@ -63,10 +73,7 @@ public class MySocketHandler extends TextWebSocketHandler {   // handler需要�
         JSONObject jsonObject = JSONObject.fromObject(message.getPayload());
         this.gameControll.getRooms().get(jsonObject.getInt("roomIdx")).receiveMessage(jsonObject);
     }
-
-
     public void sendMessageToUser(int idx, WebSocketMessage<String> message) throws Exception {
-
         set.get(idx).sendMessage(message);//就是通过session发送的数据
     }
 
@@ -81,8 +88,10 @@ public class MySocketHandler extends TextWebSocketHandler {   // handler需要�
         } catch (Exception e) {
             e.printStackTrace();
         }
+        synchronized (onlineUserOperator.getOnlineUsers()) {
+            onlineUserOperator.updateUsers();
+        }
         subCount();
-        System.out.println("目前连接人数:" + getOnlineCount());
     }
 
     //获取线上人数

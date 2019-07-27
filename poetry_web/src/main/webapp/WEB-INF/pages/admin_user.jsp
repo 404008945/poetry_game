@@ -94,7 +94,6 @@
     </table>
     <div class="center">
         <ul class="pagination">
-
             <c:if test="${pageInfo.pageNum==1}">
                 <li><a style="pointer-events: none;cursor:default;" href="/admin/userPage/1">首页</a></li>            </c:if>
             <c:if test="${pageInfo.pageNum!=1}">
@@ -119,7 +118,6 @@
             <c:if test="${pageInfo.pageNum!=pageInfo.pages}">
                 <li><a href="/admin/userPage/${pageInfo.pages}">尾页</a></li>
             </c:if>
-
         </ul>
     </div>
 </div>

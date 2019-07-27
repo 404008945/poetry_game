@@ -35,16 +35,18 @@
     <!--定时器-->
     <task:annotation-driven/>
 
-    <!--webSocket配置-->
     <bean id="helloHandler" class="com.poetry.websocket.MySocketHandler"/>
+    <bean id="onlineHandler"  class="com.poetry.websocket.OnlineSocketHandler" />
     <websocket:handlers>
         <!--配置消息处理路径和bean的关系-->
         <websocket:mapping path="/hello" handler="helloHandler"/>
+        <websocket:mapping path="/online" handler="onlineHandler"/>
         <!--配置握手拦截器-->
         <websocket:handshake-interceptors>
             <bean class="com.poetry.websocket.HandShakeInterceptor"/>
         </websocket:handshake-interceptors>
     </websocket:handlers>
+
 
     <!--配置文件上传解析器 id必须为multipartResolver Apache-->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

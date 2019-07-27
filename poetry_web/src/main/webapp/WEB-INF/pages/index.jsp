@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>title</title>
+    <title>游戏界面</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content  ="IE=edge,chrome=1"/>
     <meta name="viewport"
@@ -51,7 +51,7 @@
             </div>
         </div>
         <div id="load">
-            <div class="text">正在进入游戏</div>
+            <div class="text">正在匹配</div>
         </div>
         <div class="text-main1 hide">
             <div class="question-text">
@@ -269,7 +269,7 @@
     var len;//全局  代表当前页面
     //判断当前浏览器是否支持WebSocket
     if ('WebSocket' in window) {
-        websocket = new WebSocket("ws://localhost:8010/hello");//第一次进去有seseeson被服务器保存下来了
+        websocket = new WebSocket("ws://localhost:8080/hello");//第一次进去有seseeson被服务器保存下来了
     } else {
         alert('当前浏览器 Not support websocket')
     }
@@ -283,9 +283,7 @@
     }
     //接收到消息的回调方法
     websocket.onmessage = function (event) {
-        console.log(event.data)
         var obj = eval('(' + event.data + ')');
-        console.log(obj);
         /*开始游戏*/
         if (obj.matching === 'true') {
 
@@ -320,12 +318,10 @@
                         str = "<div class='no-icon'></div>"
                     }
 
-                    console.log()
                     $(".text-main" + qNum + " ul li").eq(obj.choice - 1).append(str).addClass("opActive");
                     $(".text-main" + qNum + " ul li").unbind("click").unbind("mouseover").unbind("mouseout");
                 }
             }
-            console.log(obj);
             roomIdx = obj.roomIdx;//拿到当前用户所在的房间号以及用户位置
             playerIdx = obj.playerIdx;
             len = obj.questionNum;
@@ -339,13 +335,9 @@
             if (playerIdx == 0) {
                 setScore0(obj.score0);
                 setScore1(obj.score1);
-                // $(".score0").html(obj.score0);
-                // $(".score1").html(obj.score1);
             } else {
                 setScore0(obj.score1);
                 setScore1(obj.score0);
-                // $(".score0").html(obj.score1);
-                // $(".score1").html(obj.score0);
             }
         } else if (obj.over == "true") {
             //游戏结果出来了，本局游戏结束

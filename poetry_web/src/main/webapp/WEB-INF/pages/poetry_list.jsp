@@ -114,6 +114,23 @@
 </div>
 <script>
     $(".pagination a").css({'background-color':'#a9c6de'})
+    var  w=$(window).width();
+    update();
+
+    $(window).resize(function () {
+        update();
+    });
+    function update(){
+
+        if(w<500)
+        {
+            $(".pagination li a").css({"width":"16.6666%"});
+            $(".pagination li a").css({"font-size":"10px"});
+            $(".pagination li a").css({"height":"60px"});
+
+        }
+
+    }
 </script>
 </body>
 </html>

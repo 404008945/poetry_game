@@ -20,17 +20,17 @@ public class PoemsServiceImpl implements PoemsService {
         return poemsDao.selectById(id);
     }
 
-    public PageInfo getByTitle(String title,int pageNum,int pageSize) {
-        PageHelper.startPage(pageNum,pageSize);
+    public PageInfo getByTitle(String title, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
         List<Poems> poetry = poemsDao.selectByTitle(title);
-        PageInfo pageInfo=new PageInfo(poetry);
+        PageInfo pageInfo = new PageInfo(poetry);
         return pageInfo;
     }
 
     public PageInfo getByAuthor(String author, int pageNumber, int pageSize) {
-        PageHelper.startPage(1,pageSize);
-        List<Poems> poems=poemsDao.selectByAuthor(author);
-        PageInfo<Poems> poemsPageInfo=new PageInfo<Poems>(poems);
+        PageHelper.startPage(1, pageSize);
+        List<Poems> poems = poemsDao.selectByAuthor(author);
+        PageInfo<Poems> poemsPageInfo = new PageInfo<Poems>(poems);
         return poemsPageInfo;
     }
 
@@ -39,9 +39,9 @@ public class PoemsServiceImpl implements PoemsService {
     }
 
     public PageInfo getByContent(String content, int pageNumber, int pageSize) {
-        PageHelper.startPage(pageNumber,pageSize);
+        PageHelper.startPage(pageNumber, pageSize);
         List<Poems> poems = poemsDao.selectByContent(content);
-        PageInfo pageInfo=new PageInfo(poems);
+        PageInfo pageInfo = new PageInfo(poems);
         return pageInfo;
     }
 }

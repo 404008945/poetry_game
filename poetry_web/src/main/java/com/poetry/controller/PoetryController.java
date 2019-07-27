@@ -18,7 +18,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -35,6 +34,9 @@ public class PoetryController {
 
     @Autowired
     private PoemsService poemsService;
+
+    @Autowired
+    private PoetryAuthorService poetryAuthorService;
 
     @Autowired
     private PoemsAuthorService poemsAuthorService;
@@ -63,6 +65,9 @@ public class PoetryController {
     @Autowired
     private PoetryAddService poetryAddService;
 
+    @Autowired
+    private FriendService friendService;
+
     @ModelAttribute  //所有controller执行前都要执行他
     public void dealCookie(HttpServletRequest req, HttpServletResponse resp) {
         Cookie[] cookies = req.getCookies();
@@ -80,11 +85,11 @@ public class PoetryController {
             }
         }
         if (acc != null && !acc.equals("") && psw != null && !psw.equals("")) {
-
             User user = userService.getByAccount(acc);
             if (user.getPassword().equals(psw)) {
-                int count = messageService.getUnreadNum(user.getId());
-                req.getSession().setAttribute("messageNum", count);
+                int count1 = messageService.getUnreadNum(user.getId());
+                int count2 = friendService.getRequestCount(user.getAccount());
+                req.getSession().setAttribute("messageNum", count1 + count2);
                 req.getSession().setAttribute("user", user);
             }
         }
@@ -92,14 +97,13 @@ public class PoetryController {
 
     //猜你喜欢
     @RequestMapping("/recommend")
-    public String recommend(Model model,HttpServletRequest request)
-    {
-        RecommendDto dto=new RecommendDto();
+    public String recommend(Model model, HttpServletRequest request) {
+        RecommendDto dto = new RecommendDto();
         User user = (User) request.getSession().getAttribute("user");
         Integer likeAuthorId = user.getLikeAuthorId();
         String likeDynasty = user.getLikeDynasty();
         String likeType = user.getLikeType();
-        Random random=new Random();
+        Random random = new Random();
         //产生0,1,2随机数
         int i = random.nextInt(3);
         dto.setChoose(i);
@@ -107,21 +111,25 @@ public class PoetryController {
         dto.setDynasty(likeDynasty);
         dto.setType(likeType);
         Poetry poetry = poetryService.getByRecommend(dto);
-        return "redirect:/enjoy/detail_poetry/"+poetry.getId();
+        return "redirect:/enjoy/detail_poetry/" + poetry.getId();
     }
 
     @RequestMapping("/index")
     public String mainPage(Model model) {
-        PoetryInfo poetryInfo = PreDayPoetryUtil.getPoetry();
+        Boolean type = false;
+        PoetryInfo poetryInfo = PreDayPoetryUtil.getPoetry(type);
         model.addAttribute("poetryInfo", poetryInfo);
+        model.addAttribute("type", type);
         return "main";
     }
 
     @RequestMapping("/deleteComment/{pid}/{cid}")
-    public  String  deleteComment(@PathVariable ("pid") Integer pid,@PathVariable ("cid") Integer cid){
+    public String deleteComment(@PathVariable("pid") Integer pid, @PathVariable("cid") Integer cid) {
         commentForPoetryService.deleteByPrimaryKey(cid);
-        return  "redirect:/enjoy/detail_poetry/"+pid;
+        return "redirect:/enjoy/detail_poetry/" + pid;
     }
+
+    //展示诗词细节
     @RequestMapping("/detail_poetry/{id}")
     public String poetryDetail(@PathVariable("id") Integer id, Model model, HttpServletRequest request) {
         PoetryDto dto = new PoetryDto();
@@ -130,35 +138,39 @@ public class PoetryController {
             poetry.getCommentForPoetry().get(i).setUser(userService.getByPrimaryKey(poetry.getCommentForPoetry().get(i).getUserId()));
         }
         Info info1 = infoService.getByPrimaryKey(poetry.getInfoId());
-        /* System.out.println(info1);*/
         String str[] = info1.getType().split("，");
-        /*  System.out.println(str[0]);*/
-        Set<Info> infos = new HashSet<>();
+        Set<Integer> infos = new HashSet<>();
         for (String s : str) {
             for (Info info : infoService.selectByType(s)) {
-                infos.add(info);
+                infos.add(info.getId());
             }
         }
-        // System.out.println(infoService.selectByType("离别"));
+
         List<Poetry> list = new ArrayList<>();
-        for (Info info : infos) {
-            Poetry poetry1 = poetryService.selectByInfoId(info.getId());
+        for (Integer c : infos) {
+            Poetry poetry1 = poetryService.getById(c);
             list.add(poetry1);
         }
-        while(list.size()>5){
-            list.remove(list.size()-1);
+
+        while (list.size() > 5) {
+            list.remove(list.size() - 1);
         }
-       /* System.out.println("-------------");
-        System.out.println(list);*/
         model.addAttribute("recommendPoetry", list);
-        //  System.out.println(poetry.getCommentForPoetry().get(0).getContent());
         Author author = authorService.getById(poetry.getAuthorId());
         Info info = infoService.getByPrimaryKey(poetry.getInfoId());
         model.addAttribute("poetry", poetry);
-        poetry.setContent(poetry.getContent().replace("\r\n", "<br>"));
+        model.addAttribute("type", poetry.getContent().charAt(poetry.getContent().length() - 1) == '~');
+        if (poetry.getContent().charAt(poetry.getContent().length() - 1) == '~') {
+            poetry.setContent(poetry.getContent().substring(0, poetry.getContent().length() - 1));
+        }
+        String content[] = poetry.getContent().split("\r\n");
+        model.addAttribute("content", content);//数组元素
         model.addAttribute("author", author);
+        info.setNote(info.getNote().replace("\r\n", "<br>"));
+        info.setEnjoy(info.getEnjoy().replace("\r\n", "<br>"));
+        info.setBackground(info.getBackground().replace("\r\n", "<br>"));
+        info.setTranslate(info.getTranslate().replace("\r\n", "<br>"));
         model.addAttribute("info", info);
-
         boolean flag = false;//判断是否已经点赞
         if (request.getSession().getAttribute("user") != null) {
             int uid = ((User) request.getSession().getAttribute("user")).getId();
@@ -166,7 +178,6 @@ public class PoetryController {
             if (likesForPoetryService.selectByInfo(uid, id) != null) {
                 flag = true;
             }
-
         }
         model.addAttribute("flag", flag);
         return "poetry_detail";
@@ -174,15 +185,14 @@ public class PoetryController {
 
     //处理唐
     @RequestMapping("/tangshi_list/{page}")
-    public String tangshiList(Model model,@PathVariable("page")Integer page) {
+    public String tangshiList(Model model, @PathVariable("page") Integer page) {
         PageInfo pageInfo = poetryService.getByDynasty("唐", page, 6);
-        List<PoetryListInfo> infoList=new ArrayList<>();
+        List<PoetryListInfo> infoList = new ArrayList<>();
         List<Poetry> list = pageInfo.getList();
         String[] colors = PoetryUtils.getColors();
-        int i=0;
-        for(Poetry poetry:list)
-        {
-            PoetryListInfo info=new PoetryListInfo();
+        int i = 0;
+        for (Poetry poetry : list) {
+            PoetryListInfo info = new PoetryListInfo();
             info.setPoetry(poetry);
             info.setCommentsNum(commentForPoetryService.getCommentsNum(poetry.getId()));
             info.setLikesNum(likesForPoetryService.getLikesNum(poetry.getId()));
@@ -190,31 +200,29 @@ public class PoetryController {
             infoList.add(info);
             i++;
         }
-        model.addAttribute("infos",infoList);
+        model.addAttribute("infos", infoList);
         model.addAttribute("type", "唐代");
         model.addAttribute("poetryValue", ConstantValue.TANGSHI_VALUE);
         //地址拼接字段
-        model.addAttribute("type1","tangshi_list");
-        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("type1", "tangshi_list");
+        model.addAttribute("pageInfo", pageInfo);
         return "poetry_list";
     }
 
     //处理宋
     @RequestMapping("/songshi_list/{page}")
-    public String songshiList(@PathVariable("page")Integer page, Model model) {
-        return common(page,"songshi_list","宋代",ConstantValue.SONGSHI_VALUE,"宋",model);
+    public String songshiList(@PathVariable("page") Integer page, Model model) {
+        return common(page, "songshi_list", "宋代", ConstantValue.SONGSHI_VALUE, "宋", model);
     }
 
-    public String common(Integer page,String type1,String type,String poetryValue,String dynasty,Model model)
-    {
+    public String common(Integer page, String type1, String type, String poetryValue, String dynasty, Model model) {
         PageInfo pageInfo = poetryService.getByDynasty(dynasty, page, 6);
-        List<PoetryListInfo> infoList=new ArrayList<>();
+        List<PoetryListInfo> infoList = new ArrayList<>();
         List<Poetry> list = pageInfo.getList();
         String[] colors = PoetryUtils.getColors();
-        int i=0;
-        for(Poetry poetry:list)
-        {
-            PoetryListInfo info=new PoetryListInfo();
+        int i = 0;
+        for (Poetry poetry : list) {
+            PoetryListInfo info = new PoetryListInfo();
             info.setPoetry(poetry);
             info.setCommentsNum(commentForPoetryService.getCommentsNum(poetry.getId()));
             info.setLikesNum(likesForPoetryService.getLikesNum(poetry.getId()));
@@ -222,29 +230,31 @@ public class PoetryController {
             infoList.add(info);
             i++;
         }
-        model.addAttribute("infos",infoList);
+        model.addAttribute("infos", infoList);
         model.addAttribute("type", type);
         model.addAttribute("poetryValue", poetryValue);
         //地址拼接字段
-        model.addAttribute("type1",type1);
-        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("type1", type1);
+        model.addAttribute("pageInfo", pageInfo);
         return "poetry_list";
     }
 
     //处理元
     @RequestMapping("/yuan_list/{page}")
-    public String yuanList(@PathVariable("page")Integer page, Model model) {
-        return common(page,"yuan_list","元代",ConstantValue.YUAN_VALUE,"元",model);
+    public String yuanList(@PathVariable("page") Integer page, Model model) {
+        return common(page, "yuan_list", "元代", ConstantValue.YUAN_VALUE, "元", model);
     }
+
     //处理明
     @RequestMapping("/ming_list/{page}")
-    public String mingList(@PathVariable("page")Integer page, Model model) {
-        return common(page,"ming_list","明代",ConstantValue.MING_VALUE,"明",model);
+    public String mingList(@PathVariable("page") Integer page, Model model) {
+        return common(page, "ming_list", "明代", ConstantValue.MING_VALUE, "明", model);
     }
+
     //处理清
     @RequestMapping("/qing_list/{page}")
-    public String qingList(@PathVariable("page")Integer page, Model model) {
-        return common(page,"qing_list","清代",ConstantValue.QING_VALUE,"清",model);
+    public String qingList(@PathVariable("page") Integer page, Model model) {
+        return common(page, "qing_list", "清代", ConstantValue.QING_VALUE, "清", model);
     }
 
     //处理宋词列表
@@ -334,7 +344,7 @@ public class PoetryController {
     @RequestMapping("/random_poetry")
     public String poetryRandom(Model model) {
         Poetry poetry = poetryService.getOne();
-        return "redirect:/enjoy/detail_poetry/"+poetry.getId();
+        return "redirect:/enjoy/detail_poetry/" + poetry.getId();
     }
 
     //诗词搜索界面
@@ -346,6 +356,7 @@ public class PoetryController {
         model.addAttribute("searchDto", new SearchDto());
         return "search";
     }
+
     //诗词搜索
     @RequestMapping("/search/{page}")
     public String search(@PathVariable("page") int page, HttpServletRequest request, Model model) {
@@ -377,15 +388,12 @@ public class PoetryController {
             pageInfo = poetryService.getByAuthor(searchDto.getContent(), page, 6);
             //设置作者信息
             Author author = authorService.getByName(searchDto.getContent());
-            if(author!=null)
-            {
-                if(author.getName()!=null)
-                {
-                    model.addAttribute("title",author.getName());
+            if (author != null) {
+                if (author.getName() != null) {
+                    model.addAttribute("title", author.getName());
                 }
-                if(author.getIntro()!=null)
-                {
-                    model.addAttribute("content",author.getIntro());
+                if (author.getIntro() != null) {
+                    model.addAttribute("content", author.getIntro());
                 }
             }
             List<Poetry> list = pageInfo.getList();
@@ -407,7 +415,7 @@ public class PoetryController {
             //按照诗词名
             pageInfo = poetryService.getByTitle(searchDto.getContent(), page, 6);
             List<Poetry> list = pageInfo.getList();
-            model.addAttribute("title",searchDto.getContent());
+            model.addAttribute("title", searchDto.getContent());
             if (list.size() == 0) {
                 PageInfo pageInfo1 = poetryService.getByTitle(searchDto.getContent(), page, 6);
                 if (pageInfo1.getList().size() == 0) {
@@ -476,8 +484,8 @@ public class PoetryController {
                     }
                 }
             }
-        }else{
-            likes=null;
+        } else {
+            likes = null;
         }
         model.addAttribute("likes", likes);
         model.addAttribute("colors", PoetryUtils.getColors());
@@ -485,17 +493,16 @@ public class PoetryController {
         model.addAttribute("isP", isP);
         return "search_list";
     }
+
     @RequestMapping("/poetryAddPage")
-    public String poetryAddPage()
-    {
+    public String poetryAddPage() {
         return "poetry_add";
     }
 
     @RequestMapping("/poetryAdd")
-    public String poetryAdd(PoetryAdd poetryAdd, Model model, HttpSession session)
-    {
+    public String poetryAdd(PoetryAdd poetryAdd, Model model, HttpSession session) {
         poetryAddService.add(poetryAdd);
-        session.setAttribute("message","反馈成功,感谢您的反馈");
+        session.setAttribute("message", "反馈成功,感谢您的反馈");
         return "redirect:/enjoy/searchPage";
     }
 }

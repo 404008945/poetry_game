@@ -100,9 +100,11 @@ public class PoetryController {
     public String recommend(Model model, HttpServletRequest request) {
         RecommendDto dto = new RecommendDto();
         User user = (User) request.getSession().getAttribute("user");
-        Integer likeAuthorId = user.getLikeAuthorId();
-        String likeDynasty = user.getLikeDynasty();
-        String likeType = user.getLikeType();
+        User u = userService.getByAccount(user.getAccount());
+        System.out.println(u);
+        Integer likeAuthorId = u.getLikeAuthorId();
+        String likeDynasty = u.getLikeDynasty();
+        String likeType = u.getLikeType();
         Random random = new Random();
         //产生0,1,2随机数
         int i = random.nextInt(3);
@@ -111,6 +113,7 @@ public class PoetryController {
         dto.setDynasty(likeDynasty);
         dto.setType(likeType);
         Poetry poetry = poetryService.getByRecommend(dto);
+        System.out.println(poetry);
         return "redirect:/enjoy/detail_poetry/" + poetry.getId();
     }
 

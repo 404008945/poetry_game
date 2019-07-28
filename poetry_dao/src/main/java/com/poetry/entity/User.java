@@ -12,12 +12,11 @@ public class User {
     private String username;
 
     @NotNull(message = "密码不能为空")
-    @Size(min = 6,max = 20,message = "密码长度必须在6-10之间")
+    @Size(min = 6, max = 20, message = "密码长度必须在6-10之间")
     private String password;
 
     //账户
-    @NotNull(message = "账户名不能为空")
-    @Size(min = 6,max = 20,message = "账户长度必须在8-15之间")
+    @Size(min = 6, max = 20, message = "账户长度必须在8-15之间")
     private String account;
 
     private Integer totalNumber;
@@ -37,6 +36,8 @@ public class User {
 
     @Email
     private String email;
+
+    private String qqOpenid;//qq登录的OPENID
 
     //0为普通账户
     //1为管理员账户
@@ -146,6 +147,14 @@ public class User {
         this.type = type;
     }
 
+    public String getQqOpenid() {
+        return qqOpenid;
+    }
+
+    public void setQqOpenid(String qqOpenid) {
+        this.qqOpenid = qqOpenid;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -161,6 +170,7 @@ public class User {
                 ", image='" + image + '\'' +
                 ", views=" + views +
                 ", email='" + email + '\'' +
+                ", qqOpenid='" + qqOpenid + '\'' +
                 ", type=" + type +
                 '}';
     }

@@ -56,6 +56,9 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/bind/**"/>
+            <mvc:exclude-mapping path="/login/qq"/>
+            <mvc:exclude-mapping path="/loginAccount"/>
             <bean class="com.poetry.global.GlobalInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

@@ -26,4 +26,13 @@ public interface UserService {
     void addViews(Integer id);
 
     int updateByPrimaryKey(User record);
+    User getByQqOpenid(String openid);
+
+    User findByAccountAndPassword(String account, String password);
+
+    void update(User user);
+
+    User findByAccount(String account);
+
+    void save(User user1);
 }

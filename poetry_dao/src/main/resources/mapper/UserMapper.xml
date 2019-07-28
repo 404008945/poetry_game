@@ -1,94 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.poetry.dao.UserDao">
-  <resultMap id="BaseResultMap" type="com.poetry.entity.User">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="username" jdbcType="VARCHAR" property="username" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="account" jdbcType="VARCHAR" property="account" />
-    <result column="total_number" jdbcType="INTEGER" property="totalNumber" />
-    <result column="win_number" jdbcType="INTEGER" property="winNumber" />
-    <result column="like_author_id" jdbcType="INTEGER" property="likeAuthorId" />
-    <result column="like_dynasty" jdbcType="VARCHAR" property="likeDynasty" />
-    <result column="like_type" jdbcType="VARCHAR" property="likeType" />
-    <result column="image" jdbcType="VARCHAR" property="image" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="views" jdbcType="INTEGER" property="views" />
-    <result column="type" jdbcType="INTEGER" property="type" />
-  </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <resultMap id="BaseResultMap" type="com.poetry.entity.User">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="account" jdbcType="VARCHAR" property="account"/>
+        <result column="total_number" jdbcType="INTEGER" property="totalNumber"/>
+        <result column="win_number" jdbcType="INTEGER" property="winNumber"/>
+        <result column="like_author_id" jdbcType="INTEGER" property="likeAuthorId"/>
+        <result column="like_dynasty" jdbcType="VARCHAR" property="likeDynasty"/>
+        <result column="like_type" jdbcType="VARCHAR" property="likeType"/>
+        <result column="image" jdbcType="VARCHAR" property="image"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="views" jdbcType="INTEGER" property="views"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="open_id" property="qqOpenid"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from `user`
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.poetry.entity.User" useGeneratedKeys="true">
-    insert into `user` (username, password, total_number, 
-      win_number, like_author_id, like_dynasty, 
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.poetry.entity.User" useGeneratedKeys="true">
+    insert into `user` (username, password, total_number,
+      win_number, like_author_id, like_dynasty,
       like_type, image, email,account,views,`type`
       )
-    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{totalNumber,jdbcType=INTEGER}, 
-      #{winNumber,jdbcType=INTEGER}, #{likeAuthorId,jdbcType=INTEGER}, #{likeDynasty,jdbcType=VARCHAR}, 
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{totalNumber,jdbcType=INTEGER},
+      #{winNumber,jdbcType=INTEGER}, #{likeAuthorId,jdbcType=INTEGER}, #{likeDynasty,jdbcType=VARCHAR},
       #{likeType,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},#{account,jdbcType=VARCHAR},#{views,jdbcType=INTEGER},#{type,jdbcType=INTEGER}
       )
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.poetry.entity.User">
-    update `user`
-    <set>
-      <if test="username != null">
-        username = #{username},
-      </if>
-      <if test="password!=null">
-        password=#{password},
-      </if>
-      <if test="email!=null">
-        email=#{email},
-      </if>
-      <if test="password!=null">
-        password=#{password},
-      </if>
-      <if test="image!=null">
-        image=#{image},
-      </if>
-      <if test="account!=null">
-        account=#{account},
-      </if>
-      <if test="totalNumber!=null">
-        total_number=#{totalNumber},
-      </if>
-      <if test="winNumber!=null">
-        win_number=#{winNumber},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, username, password, total_number, win_number, like_author_id, like_dynasty, 
+    <insert id="save">
+         insert into `user` (username,password,image,account,open_id,total_number,win_number,views,`type`)
+          values (#{username}, #{password},  #{image},#{account},#{qqOpenid},#{totalNumber},#{winNumber},#{views},#{type})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.poetry.entity.User">
+        update `user`
+        <set>
+            <if test="likeAuthorId!=null">
+                like_author_id=#{likeAuthorId},
+            </if>
+            <if test="likeType!=null">
+                like_type=#{likeType},
+            </if>
+            <if test="likeDynasty!=null">
+                like_Dynasty=#{likeDynasty},
+            </if>
+        </set>
+        where account=#{account} and password=#{password}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, username, password, total_number, win_number, like_author_id, like_dynasty,
     like_type, image, email,account,views,`type`
     from `user`
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap">
+    <select id="selectAll" resultMap="BaseResultMap">
     select id, username, password, total_number, win_number, like_author_id, like_dynasty,views
     like_type, image, email,account,views,`type`
     from `user`
   </select>
 
-  <select id="selectByAccount" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="selectByAccount" parameterType="java.lang.String" resultMap="BaseResultMap">
     select id, username, password, total_number, win_number, like_author_id, like_dynasty,
     like_type, image, email,account,views,`type`
     from `user`
     where account = #{account}
   </select>
 
-  <select id="selectByEmail" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="selectByEmail" parameterType="java.lang.String" resultMap="BaseResultMap">
     select id, username, password, total_number, win_number, like_author_id, like_dynasty,
     like_type, image, email,account,views,`type`
     from `user`
     where email = #{email}
   </select>
+    <select id="getByOpenId" resultType="com.poetry.entity.User">
+        select * from `user` where open_id=#{openid}
+     </select>
+    <select id="findByAccountAndPassword" resultType="com.poetry.entity.User">
+        select * from `user` where account=#{account} and password=#{password}
+    </select>
+    <select id="findByAccount" resultType="com.poetry.entity.User">
+        select * from `user` where account=#{account}
+    </select>
 
-  <update id="addViews" parameterType="java.lang.Integer">
+    <update id="addViews" parameterType="java.lang.Integer">
     update `user`
     set views=views+1
     where id=#{id}
   </update>
+    <update id="update">
+    update `user`
+      set open_id=#{qqOpenid}
+      where account=#{account} and password=#{password}
+  </update>
+
+
 </mapper>

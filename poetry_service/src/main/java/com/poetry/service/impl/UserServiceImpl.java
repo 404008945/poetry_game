@@ -33,10 +33,10 @@ public class UserServiceImpl implements UserService {
         return userDao.selectByPrimaryKey(id);
     }
 
-    public PageInfo getAll(int pageNumber,int pageSize) {
-        PageHelper.startPage(pageNumber,pageSize);
+    public PageInfo getAll(int pageNumber, int pageSize) {
+        PageHelper.startPage(pageNumber, pageSize);
         List<User> users = userDao.selectAll();
-        PageInfo pageInfo=new PageInfo(users);
+        PageInfo pageInfo = new PageInfo(users);
         return pageInfo;
     }
 
@@ -58,5 +58,25 @@ public class UserServiceImpl implements UserService {
 
     public int updateByPrimaryKey(User record) {
         return userDao.updateByPrimaryKey(record);
+    }
+
+    public User getByQqOpenid(String openid) {
+        return userDao.getByOpenId(openid);
+    }
+
+    public User findByAccountAndPassword(String account, String password) {
+        return userDao.findByAccountAndPassword(account, password);
+    }
+
+    public void update(User user) {
+        userDao.update(user);
+    }
+
+    public User findByAccount(String account) {
+        return userDao.findByAccount(account);
+    }
+
+    public void save(User user1) {
+        userDao.save(user1);
     }
 }

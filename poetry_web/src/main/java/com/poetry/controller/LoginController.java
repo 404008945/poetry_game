@@ -1,8 +1,10 @@
 package com.poetry.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.poetry.entity.*;
 import com.poetry.global.ConstantValue;
 import com.poetry.service.*;
+import com.poetry.utils.QQConnectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +23,7 @@ import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 //登录注册功能处理
 @Controller
@@ -46,10 +50,12 @@ public class LoginController {
     @Autowired
     private FriendService friendService;
 
+    private String openId = null;
+
     //进入登录界面
     @RequestMapping("/loginPage")
     public String loginPage(Model model, HttpServletRequest request, HttpServletResponse response) {
-        Cookie[] cookies = request.getCookies();
+      /*  Cookie[] cookies = request.getCookies();
         User user = new User();
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("account")) {
@@ -58,11 +64,128 @@ public class LoginController {
                 user.setPassword(cookie.getValue());
             }
         }
-        model.addAttribute("user", user);
+        model.addAttribute("user", user);*/
         return "login";
     }
 
-    //登录
+    //防止csrf攻击
+    @GetMapping("/login/qq")
+    public String qqConnect(HttpSession session) {
+        String state = UUID.randomUUID().toString().replaceAll("-", "");
+        String url = "https://graph.qq.com/oauth2.0/show?which=Login&display=pc&response_type=code&client_id=101741032&redirect_uri=http://onuoo.cn:8080/login&state=";
+        session.setAttribute("qqState", state);
+        return "redirect:" + url + state;
+    }
+
+    @GetMapping("/login")
+    public String loginPage(String code, String state, HttpServletRequest request) throws Exception {
+        HttpSession session = request.getSession();
+        System.out.println("获取到到code" + code);
+        System.out.println("获取到state" + state);
+        String state2 = (String) session.getAttribute("qqState");
+      /*  if (state2 == null) {//说明没去腾讯登录
+            return "redirect:/login/qq";
+        } else if (!state2.equals(state)) {
+            return "redirect:/login/qq";
+        } else {*/
+        String token = QQConnectUtil.getAccessToken(code);
+        String openid = QQConnectUtil.getOpenid(token);
+        openId = openid;
+        JsonNode info = QQConnectUtil.getUserInfo(openid, token);
+        //如果是老用户则直接通过OpenId查询用户信息，登录
+        //1.如果OPENID不存在，则证明是新用户，让其绑定已有账户，或者新注册一个
+        //2.在或者：必须先注册好账号，在个人中心绑定qq
+        //新用户只用填写用户名，其他信息都在个人中心修改
+        User user = userService.getByQqOpenid(openid);
+        if (user == null) {//新用户
+            session.setAttribute("qqInfo", info);
+            session.setAttribute("nickname", info.get("nickname").asText());
+            session.setAttribute("figureurl_qq_1", info.get("figureurl_qq_1").asText());
+            return "redirect:/bind";
+        } else {//老用户
+            User u = userService.getByAccount(user.getAccount());
+            session.setAttribute("user", u);
+            return "redirect:/enjoy/index";
+        }
+    }
+
+
+    @PostMapping("/loginAccount")
+    public String loginAccount(HttpSession session, String account, String password, Model model) {
+        System.out.println("......." + account);
+        User user = userService.findByAccountAndPassword(account, password);
+        if (user != null) {
+            session.setAttribute("user", user);
+            return "redirect:/enjoy/index";
+        } else {
+            model.addAttribute("loginErr", "用户名或密码错误");
+            return "login";
+        }
+    }
+
+    @GetMapping("/bind")
+    public String bind() {
+        return "bind";
+    }
+
+
+    //绑定qq
+    @PostMapping("/bind/qq/user")
+    public String bindUser(String account, String password, HttpSession session, Model model) {
+        JsonNode qqInfo = (JsonNode) session.getAttribute("qqInfo");
+        System.out.println(account);
+        System.out.println(password);
+        if (qqInfo == null) {
+            model.addAttribute("qqError", "QQ登录信息不存在");
+            return "bind";
+        } else {
+            User user = userService.findByAccountAndPassword(account, password);
+            if (user == null) {
+                model.addAttribute("loginError", "用户名或密码不正确");
+                return "bind";
+            } else {
+                System.out.println(openId);
+                user.setQqOpenid(openId);
+                userService.update(user);
+                User u = userService.getByQqOpenid(openId);
+                session.setAttribute("user", u);
+                return "redirect:/enjoy/index";
+            }
+        }
+    }
+
+    //注册qq
+    @PostMapping("/bind/qq/create")
+    public String bindCreate(String account, String password, HttpSession session, Model model) {
+        JsonNode qqInfo = (JsonNode) session.getAttribute("qqInfo");
+        System.out.println(account);
+        System.out.println(password);
+        if (qqInfo == null) {
+            return "bind";
+        } else {
+            User user = userService.findByAccount(account);
+            if (user != null) {
+                return "bind";
+            }
+            User user1 = new User();
+            user1.setAccount(account);
+            user1.setPassword(password);
+            user1.setQqOpenid(openId);
+            user1.setUsername(qqInfo.get("nickname").asText());
+            user1.setImage(qqInfo.get("figureurl_qq_1").asText());
+            user1.setTotalNumber(0);
+            user1.setWinNumber(0);
+            user1.setViews(0);
+            user1.setType(0);
+            userService.save(user1);
+            User u = userService.getByAccount(account);
+            session.setAttribute("user", u);
+            return "redirect:/choosePage";
+        }
+    }
+
+
+   /* //登录
     @RequestMapping("/login")
     public String login(User user, HttpServletRequest request, HttpServletResponse response, Model model) {
         User login = loginService.login(user.getAccount(), user.getPassword());
@@ -155,7 +278,7 @@ public class LoginController {
                 return "register";
             }
         }
-    }
+    }*/
 
     @RequestMapping("/choosePage")
     public String choosePage(Model model, HttpServletRequest request) {
@@ -172,7 +295,7 @@ public class LoginController {
     //保存用户选择的个性化选项
     @RequestMapping("/choose_enjoy")
     public String choose(HttpServletRequest request, Model model) {
-        Integer id = (Integer) request.getSession().getAttribute("userId");
+        User user = (User) request.getSession().getAttribute("user");
         //诗词类型
         String type = request.getParameter("type");
         //作者id
@@ -180,14 +303,11 @@ public class LoginController {
         //朝代
         String dynasty = request.getParameter("dynasty");
         //更新用户信息
-        User user = new User();
-        user.setId(id);
         user.setLikeType(type);
         user.setLikeAuthorId(authorId);
         user.setLikeDynasty(dynasty);
         userService.editByPrimaryKey(user);
-        User user1 = userService.getByPrimaryKey(id);
-        request.getSession().setAttribute("user", user1);
+        request.getSession().setAttribute("user", user);
         return "redirect:/enjoy/index";
     }
 
@@ -237,7 +357,9 @@ public class LoginController {
         double win;
         int likesNum;
         String winStr;
-        User user = (User) request.getSession().getAttribute("user");
+        User u = (User) request.getSession().getAttribute("user");
+        User user = userService.getByAccount(u.getAccount());
+        System.out.println(user);
         user.setViews(userPoetryService.getAllViewsByUserId(user.getId()));
         model.addAttribute("user", user);
         //计算胜率

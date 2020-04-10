@@ -28,18 +28,18 @@ public class QQConnectUtil {
         url = url.replaceAll("APPKEY", APPKEY);
         url = url.replaceAll("CODE", authorizationCode);
         url = url.replaceAll("URI", CALLBACK);
-        System.out.println(url);
+
         String text = HttpClientUtil.doGet(url);
         int start = text.indexOf("=") + 1;
         int end = text.indexOf("&");
-        System.out.println(text);
+
         return text.substring(start, end);
     }
 
     public static String getOpenid(String accessToken) throws IOException {
         String url = "https://graph.qq.com/oauth2.0/me?access_token=" + accessToken;
         String text = HttpClientUtil.doGet(url);
-        System.out.println(text);
+
         int start = text.indexOf("callback(") + 9;
         int end = text.indexOf(")");
         text = text.substring(start, end);

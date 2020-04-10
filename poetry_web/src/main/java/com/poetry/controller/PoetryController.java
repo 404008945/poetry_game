@@ -101,7 +101,6 @@ public class PoetryController {
         RecommendDto dto = new RecommendDto();
         User user = (User) request.getSession().getAttribute("user");
         User u = userService.getByAccount(user.getAccount());
-        System.out.println(u);
         Integer likeAuthorId = u.getLikeAuthorId();
         String likeDynasty = u.getLikeDynasty();
         String likeType = u.getLikeType();
@@ -113,7 +112,7 @@ public class PoetryController {
         dto.setDynasty(likeDynasty);
         dto.setType(likeType);
         Poetry poetry = poetryService.getByRecommend(dto);
-        System.out.println(poetry);
+
         return "redirect:/enjoy/detail_poetry/" + poetry.getId();
     }
 

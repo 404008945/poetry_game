@@ -129,8 +129,9 @@
                 <h2 style="text-align:center;">历史消息</h2>
                 <c:forEach var="message" items="${messagesY}">
                     <div class="form-group">
-                        <div class="alert alert-success" role="alert">
-                            <a href="#" style="color:#3c763d;font-size: 20px">${message.info}</a>
+                        <div class="alert alert-success" role="alert" style="padding-bottom: 30px">
+                            <a href="#" style="color:#3c763d;font-size: 20px;text-decoration: none;">${message.info}</a>
+                            <button class="btn btn-warning btn-sm" style="float: right;" onclick="location.href='/user/removeMessage/?id=${message.id}'">删除</button>
                         </div>
                     </div>
                 </c:forEach>

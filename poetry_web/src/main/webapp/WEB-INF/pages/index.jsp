@@ -1,10 +1,12 @@
 <%@ page import="com.poetry.entity.User" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%@ page import="java.util.*" contentType="text/html;charset=UTF-8" language="java" %>
 <%
     if (request.getSession().getAttribute("user") == null) {//添加session
         response.sendRedirect("/loginPage");
     }
+%>
+<%
+    ResourceBundle resource = ResourceBundle.getBundle("info");
 %>
 <!DOCTYPE html>
 <html>
@@ -26,7 +28,7 @@
 <body>
 <div class="wrap">
     <div class="global">
-        <div class="timeBox">
+        <div class="timeBox" style="margin-top: 20px">
             <div class="game_time clock">
                 <div class="hold">
                     <div class="pie pie1"></div>
@@ -168,8 +170,8 @@
                 <p>平局</p>
             </div>
             <div class="agre">
-            <a href="/question/startPage" class="again">再来一局</a>
-            <a href="/enjoy/index" class="return">返回主页</a>
+                <a href="/question/startPage" class="again">再来一局</a>
+                <a href="/enjoy/index" class="return">返回主页</a>
             </div>
         </div>
     </div>
@@ -269,7 +271,8 @@
     var len;//全局  代表当前页面
     //判断当前浏览器是否支持WebSocket
     if ('WebSocket' in window) {
-        websocket = new WebSocket("ws://localhost:8080/hello");//第一次进去有seseeson被服务器保存下来了
+        var str='<%=resource.getString("host")%>'
+        websocket = new WebSocket('ws:'+str);//第一次进去有seseeson被服务器保存下来了
     } else {
         alert('当前浏览器 Not support websocket')
     }
@@ -298,9 +301,12 @@
             //需要加载对手的信息
             var imgSrc = obj.userImg;
             var url = window.location;//当前url
-            url += "";
-            url = "/downloadImg?imgSrc=" + imgSrc;
-            downloadFilebyAjax(url);
+            //  url += "";
+            // url = "/downloadImg?imgSrc=" + imgSrc;
+            var image = $(".user .right img")[0];
+            image.src="/image/"+imgSrc;
+            $(".user .right img").show();
+            //downloadFilebyAjax(url);
         } else if (obj.zzz === 'true') {//发题
             clearTime();
             updateTime();
@@ -317,7 +323,6 @@
                     } else {
                         str = "<div class='no-icon'></div>"
                     }
-
                     $(".text-main" + qNum + " ul li").eq(obj.choice - 1).append(str).addClass("opActive");
                     $(".text-main" + qNum + " ul li").unbind("click").unbind("mouseover").unbind("mouseout");
                 }
@@ -361,9 +366,10 @@
         } else if (obj.reconnectUserInfo == "true") {
             var imgSrc = obj.userImg;
             var url = window.location;//当前url
-            url += "";
-            url = "/downloadImg?imgSrc=" + imgSrc;
-            downloadFilebyAjax(url);//更新用户头像
+            var image = $(".user .right img")[0];
+            image.src="/image/"+imgSrc;
+            $(".user .right img").show();
+            //     downloadFilebyAjax(url);//更新用户头像
         }else if(obj.timeOut=="true")
         {
             alert("匹配超时,即将跳会游戏主页");

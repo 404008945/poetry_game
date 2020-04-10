@@ -129,7 +129,7 @@
                     <c:forEach items="${poetry.commentForPoetry}" var="comment">
                         <div class="media border p-3" style="border: 1px solid #ccc;border-radius: 20px">
                             <div class="media-body" style=" width: 100%;padding: 10px">
-                                <img class="img-circle" src="/image/${comment.user.image}" alt="John Doe"
+                                <img class="img-circle" src="${comment.user.image}" alt="John Doe"
                                      class="mr-3 mt-3 rounded-circle" style="width: 50px;height: 50px">
                                 <a style="font-size: 23px;"
                                    href="/user/poetry/${comment.user.id}/1">${comment.user.username}</a>

@@ -62,6 +62,34 @@ var showTime = function(){
     }
     ;
     $(".time").html(SS + "s");
+    if(SS==0)
+    {
+        clearTime();
+        //这里执行了很多次
+        //  显示正确答案并切题
+        var  me=$(".text-main" + questionNum);
+     //   console.log(me);  显示正确答案
+        me.find("li").filter("[correct='true']").append("<div class='yes-icon'></div>")
+        //显示正确答案
+
+        setTimeout(function () {
+            questionNum++;//下一题
+            if(questionNum==11)
+            {
+                //游戏结束  出结果
+                dealAns();
+                $(".clock").hide();
+            }
+            me.next().show();
+            me.hide();
+            clearTime();
+            if(questionNum!=11) {
+                updateTime();
+            }
+
+        },1000)
+
+    }
 
 };
 

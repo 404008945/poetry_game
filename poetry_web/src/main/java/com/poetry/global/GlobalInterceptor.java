@@ -12,6 +12,9 @@ public class GlobalInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String servletPath = request.getServletPath();
+        User u = (User) request.getSession().getAttribute("user");
+
+
         if (servletPath.contains("writePage")) {
             //登录才能写诗
             if (request.getSession().getAttribute("user") != null) {
@@ -23,20 +26,18 @@ public class GlobalInterceptor implements HandlerInterceptor {
                 return false;
             }
         } else {
-            if(servletPath.contains("admin"))
-            {
+            if (servletPath.contains("admin")) {
                 //管理员界面
                 User user = (User) request.getSession().getAttribute("user");
-                if(user!=null&&user.getType()==1)
-                {
+                if (user != null && user.getType() == 1) {
                     return true;
                 }
                 response.sendRedirect("/loginPage");
                 return false;
             }
             //非法访问网址,调到登录界面
-            if (servletPath.contains("comment") || servletPath.contains("write")||servletPath.contains("message")||
-                    servletPath.contains("update")||servletPath.contains("logout")||servletPath.contains("zone") ||servletPath.contains("delete")||servletPath.contains("edit") ) {
+            if (servletPath.contains("comment") || servletPath.contains("write") || servletPath.contains("message") ||
+                    servletPath.contains("update") || servletPath.contains("logout") || servletPath.contains("zone") || servletPath.contains("delete") || servletPath.contains("edit")) {
                 if (request.getSession().getAttribute("user") != null) {
                     return true;
                 } else {
@@ -44,8 +45,26 @@ public class GlobalInterceptor implements HandlerInterceptor {
                     return false;
                 }
             }
+            if (servletPath.contains("startPage")) {
+                //登录才能写诗
+                if (request.getSession().getAttribute("user") != null) {
+                    return true;
+                } else {
+                    request.getRequestDispatcher("/loginPage").forward(request, response);
+                    return false;
+                }
+            }
+            if (servletPath.contains("poetrySquare")) {
+                //登录才能写诗
+                if (request.getSession().getAttribute("user") != null) {
+                    return true;
+                } else {
+                    request.getRequestDispatcher("/loginPage").forward(request, response);
+                    return false;
+                }
+            }
+            return true;
         }
-        return true;
     }
 
     @Override

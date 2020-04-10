@@ -54,6 +54,53 @@
             color: #f00;
         }
     </style>
+
+    <link rel="stylesheet" href="/dist/rmodal-no-bootstrap.css" type="text/css" />
+    <script type="text/javascript" src="/dist/rmodal.js"></script>
+    <script type="text/javascript">
+        window.onload = function() {
+            var modal = new RModal(document.getElementById('modal'), {
+                beforeOpen: function(next) {
+                    next();
+                }
+                , afterOpen: function() {
+
+                }
+
+                , beforeClose: function(next) {
+
+                    next();
+                }
+                , afterClose: function() {
+
+                }
+
+                // , content: 'Abracadabra'
+
+                // , bodyClass: 'modal-open'
+                // , dialogClass: 'modal-dialog-lg'
+                // , dialogOpenClass: 'fadeIn'
+                // , dialogCloseClass: 'fadeOut'
+
+                // , focus: true
+                // , focusElements: ['input.form-control', 'textarea', 'button.btn-primary']
+
+                // , escapeClose: true
+            });
+
+            document.addEventListener('keydown', function(ev) {
+                modal.keydown(ev);
+            }, false);
+
+            document.getElementById('showModal').addEventListener("click", function(ev) {
+                ev.preventDefault();
+                modal.open();
+            }, false);
+
+            window.modal = modal;
+        }
+    </script>
+
 </head>
 <body style="background-color: #e9e4e6">
 
@@ -66,7 +113,18 @@
             <div class="row animate-box">
                 <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
                     <h2>${poetryDto.title}</h2>
-                    <a style="font-size: 23px;" href="/user/poetry/${userId}/1">${poetryDto.author}</a></div>
+                    <a style="font-size: 23px;" href="/user/poetry/${userId}/1">${poetryDto.author}</a>
+                    <c:if test="${sessionScope.user!=null&&poetryDto.author!=sessionScope.user.username&&!isFriend}">
+                        <div style="text-align: center;">
+                            <c:if test="${msg==null}">
+                                <a style="margin-top: 10px" href="/friend/add?account=${user.account}" class="btn btn-success btn-sm" id="showModal">添加对方为好友</a>
+                            </c:if>
+                            <c:if test="${msg!=null}">
+                                <button style="margin-top: 10px" class="btn btn-success btn-sm" disabled>请求消息已发送</button>
+                            </c:if>
+                        </div>
+                    </c:if>
+                </div>
             </div>
         </div>
         <div class="container">
@@ -137,7 +195,7 @@
         <a href="#" class="js-gotop"><i class="icon-arrow-up22"></i></a>
     </div>
     <script type="text/javascript">
-        $(".fh5co-nav").css({'background-color':'#d8cbbb'})
+        $(".fh5co-nav").css({'background-color': '#d8cbbb'})
         $(function () {
             $("#like").click(function () {
                 $("#login").html("登录才能点赞哦");
@@ -165,12 +223,40 @@
                         likes: likes
                     },
                     success: function (data) {
-                        console.log(data);
+
                     }
                 });
             })
         })
     </script>
+</div>
+
+<!--模态窗口-->
+<div id="modal" class="modal">
+    <div class="modal-dialog animated">
+        <div class="modal-content">
+            <form class="form-horizontal" method="get" action="/friend/add">
+                <div class="modal-header">
+                    <strong>请输入验证消息</strong>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="dummyText" style="font-size: 13px" class="control-label col-xs-4">告诉好友你的身份吧~</label>
+                        <div class="input-group col-xs-7">
+                            <input type="text" required="required" style="font-size: 15px" value="我是${sessionScope.user.username}，让我们成为朋友吧~" name="message" id="dummyText" class="form-control" />
+                            <input type="hidden" name="account" value="${account1}"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-default" type="button" onclick="modal.close();">取消</button>
+                    <button class="btn btn-primary" type="submit" onclick="modal.close();">发送请求</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 </body>
 </html>

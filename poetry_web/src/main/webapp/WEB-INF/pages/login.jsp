@@ -51,14 +51,21 @@
                     <input type="password" class="form-control" required="required" name="password" id="password"
                            placeholder="请输入密码" autocomplete="off">
                 </div>
-                <div class="form-group" style="text-align: center;">
-                    <input type="submit" id="btn"  value="登录" class="btn btn-primary">
+
+                <div class="form-group">
+                    <label for="remember"><input type="checkbox" checked name="remember" id="remember">记住我</label>
                 </div>
-                <div style="text-align: center">
-                    <span>QQ快速登录</span>
-                    <a href="/login/qq">
-                        <img src="/img/qq.gif" alt="">
+                <div class="form-group">
+                    <p style="font-size: 20px;">没有账号请<a href="/registerPage" style="color:#33cccc;">注册</a></p>
+                </div>
+                <div style="text-align: center;margin-bottom: 20px">
+                    <a href="/login/qq" style="text-decoration: none">
+                        <img src="/img/qq.png" alt="" width="30px">
                     </a>
+                    <span style="margin-left: 7px">QQ快速登录</span>
+                </div>
+                <div class="form-group" style="text-align: center;">
+                    <input type="submit" id="btn" value="登录" class="btn btn-primary">
                 </div>
             </form>
 

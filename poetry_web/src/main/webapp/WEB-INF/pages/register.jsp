@@ -65,20 +65,13 @@
                     <p style="font-size: 17px;color: #dd356e">${error.defaultMessage}</p>
                 </c:forEach>
                 <div class="form-group">
-                    <div class="alert alert-success" role="alert">请输入注册信息 <span style="margin-left:30%">嫌太麻烦？<a href="/fastReg">使用一键注册</a></span></div>
-                </div>
-                <div class="form-group">
                     <label for="account" style="color: #000000;font-size:20px; " >账号</label>
-                    <input type="text" value="${users.account}" name="account" required="required" class="form-control" id="account" placeholder="由数字或英文字符组成(8位-15位)" autocomplete="off">
+                    <input type="text" value="${users.account}" name="account" required="required" class="form-control" id="account" placeholder="由数字或英文字符组成" autocomplete="off">
                     <p id="text" style="color: #dd356e;font-size: 20px"></p>
                 </div>
                 <div class="form-group">
                     <label for="name" style="color: #000000;font-size:20px; ">昵称</label>
                     <input type="text" value="${users.username}" name="username" required="required"  class="form-control" id="name" placeholder="支持数字、英文字符、中文、特殊字符" autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <label for="email" style="color: #000000;font-size:20px; ">电子邮箱</label>
-                    <input type="email" required="required" value="${users.email}" name="email" class="form-control" id="email" placeholder="请输入电子邮箱" autocomplete="off">
                 </div>
                 <div class="form-group">
                     <p style="color: #000">请上传头像文件(小于5MB的图片)</p>

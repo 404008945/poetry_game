@@ -39,6 +39,8 @@ public class User {
 
     private String qqOpenid;//qq登录的OPENID
 
+    private  Integer highestScore;
+
     //0为普通账户
     //1为管理员账户
     private Integer type;
@@ -155,6 +157,14 @@ public class User {
         this.qqOpenid = qqOpenid;
     }
 
+    public Integer getHighestScore() {
+        return highestScore;
+    }
+
+    public void setHighestScore(Integer highestScore) {
+        this.highestScore = highestScore;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -171,6 +181,7 @@ public class User {
                 ", views=" + views +
                 ", email='" + email + '\'' +
                 ", qqOpenid='" + qqOpenid + '\'' +
+                ", highestScore=" + highestScore +
                 ", type=" + type +
                 '}';
     }

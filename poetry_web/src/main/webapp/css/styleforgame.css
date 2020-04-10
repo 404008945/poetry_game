@@ -1,5 +1,4 @@
 body {
-    min-width: 300px;
     background: url("../img/bg2.GIF");
 }
 
@@ -45,7 +44,7 @@ body {
 .question-act {
     font: 30px Arial;
     font-weight: lighter;
-
+      text-align: center;
     animation: questionplay 0.5s;
     /* Firefox: */
     -moz-animation: questionplay 0.5s;
@@ -85,8 +84,8 @@ body {
     width: 100%;
     margin: 0 auto 15px auto;
     position: relative;
-    font: italic 30px arial, sans-serif;
     left: 0;
+    font-size: 30px;
     font-weight: lighter;
 }
 
@@ -230,5 +229,6 @@ body {
 .headPic {
     width: 80px;
     height: 80px;
+
     border-radius: 50%;
 }

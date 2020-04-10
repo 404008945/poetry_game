@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 
 @Controller
 @RequestMapping("/friend")
@@ -65,6 +66,17 @@ public class FriendController {
             friendService.add(fromUser, account, message);
             model.addAttribute("msg", "添加好友消息已发送~");
         }
+        //判断请求路径
+        String referer = request.getHeader("Referer");
+        //1.http://localhost:8010/user/poetryDetail/34
+        //2.http://localhost:8010/friend/search?account=world
+        //第一种情况，从诗词详情界面添加好友
+        if (referer.contains("poetryDetail")) {
+            //获取诗词编号
+            String[] split = referer.split("/");
+            return "forward:/user/poetryDetail/" + split[split.length - 1];
+        }
+        //第二种情况，从好友搜索添加好友
         return "friend_search";
     }
 
@@ -73,11 +85,11 @@ public class FriendController {
     public String requestResult(Model model, HttpServletRequest request) {
         String result = request.getParameter("result");
         int messageId = Integer.valueOf(request.getParameter("messageId"));
-        System.out.println(messageId);
+
         if (result.equals("1")) {
             //将check字段设置为1
             Friend friend = friendService.getByPrimaryKey(messageId);
-            System.out.println(friend);
+
             friend.setCheck(true);
             friendService.editByPrimaryKey(friend);
             //跳转到主页，顺便显示好友

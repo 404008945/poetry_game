@@ -94,6 +94,13 @@
                     <p>${content}</p>
                     <button style="background-color:#f3dcad" class="btn" onclick="location.href='/user/poetrySquare/1?type=1'">按热度排行&nbsp;<img src="/images/hot.png" width="25" height="25"/> </button>
                     <button style="background-color:#f3dcad" class="btn" onclick="location.href='/user/poetrySquare/1?type=0'">按时间排行&nbsp;<img src="/images/time.png" width="25" height="25"/></button>
+                    <br>
+                    <c:if test="${sessionScope.user!=null}">
+                        <button class="btn btn-success" style="width:43%;margin-top: 10px" onclick="location.href='/user/writePage'">即刻开始你的创作</button>
+                    </c:if>
+                    <c:if test="${sessionScope.user==null}">
+                        <button class="btn btn-success" style="width:43%;margin-top: 10px" onclick="location.href='/loginPage'">登录开始你的创作</button>
+                    </c:if>
                 </div>
             </div>
             <div class="row">

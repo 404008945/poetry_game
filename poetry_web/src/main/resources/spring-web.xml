@@ -36,7 +36,7 @@
     <task:annotation-driven/>
 
     <bean id="helloHandler" class="com.poetry.websocket.MySocketHandler"/>
-    <bean id="onlineHandler"  class="com.poetry.websocket.OnlineSocketHandler" />
+    <bean id="onlineHandler" class="com.poetry.websocket.OnlineSocketHandler"/>
     <websocket:handlers>
         <!--配置消息处理路径和bean的关系-->
         <websocket:mapping path="/hello" handler="helloHandler"/>

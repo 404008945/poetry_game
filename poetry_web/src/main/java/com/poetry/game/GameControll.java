@@ -1,9 +1,7 @@
 package com.poetry.game;
 
-import com.poetry.dao.UserDao;
 import com.poetry.service.QuestionService;
 import com.poetry.service.UserService;
-import com.poetry.service.impl.QuestionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -22,6 +20,8 @@ public class GameControll {//这是一个单例类
     private QuestionService questionService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private OnlineUserOperator onlineUserOperator;
     private List<Room> rooms;//游戏房间
     private List<Player> players1;   //诗词竞赛玩家排队队列
     private LinkedList<Player> players2;   //飞花令玩家排队队列
@@ -50,7 +50,11 @@ public class GameControll {//这是一个单例类
                 return;
             }
         }
+        player.setGameing(true);//进入界面(等待队列)就认为是不可以邀请的
+            //需要通知好友
+        //进入游戏界面就认为是进入了游戏
         player.setGameControll(this);
+            onlineUserOperator.updateMyUsers(player.getUser().getAccount());
         players1.add(0,player);//用户来到匹配页面就加入     在这里开始计时
             player.startTimer();
         while (players1.size() >= 2) {//新建房间
@@ -63,13 +67,11 @@ public class GameControll {//这是一个单例类
         if (players1.size() == 1) {
             players1.get(0).sendMessage("{'matching':'true'}");
         }
-
         sendMessageToALLUser();
         }finally {
             lock.unlock();
         }
     }
-
     public void claearRoom(int roomIdx) {
         this.getRooms().set(roomIdx, null);
         int n = getRooms().size() - 1;//从尾部进行进行清除房间  不会改变次序 因此不会发生玩家在游戏过程中发生房间偏移导致出错
@@ -85,7 +87,11 @@ public class GameControll {//这是一个单例类
             players1.remove(player);
         }
     }
-
+    public  void creatRoom(Player p1, Player p2){
+        p1.setGameing(true);
+        p2.setGameing(true);
+        rooms.add(new Room(p1, p2, 0, rooms.size(), questionService.selectByRandom(), this, userService));
+    }
     public List<Room> getRooms() {
         return rooms;
     }
@@ -109,7 +115,6 @@ public class GameControll {//这是一个单例类
     public void setPlayers2(LinkedList<Player> players2) {
         this.players2 = players2;
     }
-
 
     public QuestionService getQuestionService() {
         return questionService;

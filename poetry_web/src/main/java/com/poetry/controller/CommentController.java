@@ -41,7 +41,7 @@ public class CommentController {
     @RequestMapping(value = "/dofavor", method = RequestMethod.POST)
     public void favor(@RequestParam("pid") Integer pid, @RequestParam("like") Boolean like, HttpServletRequest request)//拿到连个id建立关系即可
     {
-        System.out.println(pid);
+
         User u = (User) request.getSession().getAttribute("user");
         User user = userService.getByAccount(u.getAccount());
         int uid = user.getId();

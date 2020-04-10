@@ -79,15 +79,15 @@
                 <c:forEach var="poetry" items="${poetry}">
                     <div class="form-group">
                         <div class="alert alert-success" role="alert"><p><fmt:formatDate value="${poetry.time}" pattern="yyyy年MM月dd日 HH:mm:ss"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;浏览量:${poetry.views}&nbsp;&nbsp;&nbsp;点赞量:${poetry.likes}
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a style="color: #e14b7e" href="/poetry/editPage/${poetry.id}">修改该作品</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a style="color: #e14b7e" href="/poetry/delete/${poetry.id}">删除该作品</a></p>
-                            <a href="user/poetryDetail/${poetry.id}" style="color:#3c763d;font-size: 17px">${poetry.username}——${poetry.title}</a></div>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a style="color: #e14b7e;text-decoration: none" href="/poetry/editPage/${poetry.id}">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a style="color: #e14b7e;text-decoration: none" href="/poetry/delete/${poetry.id}">删除</a></p>
+                            <a href="user/poetryDetail/${poetry.id}" style="color:#3c763d;font-size: 16px;text-decoration: none"><span style="font-size: 20px">${poetry.title}</span>&nbsp;&nbsp;&nbsp;${poetry.username}</a></div>
                     </div>
                 </c:forEach>
                 <h2 style="text-align:center;">那些我觉得很赞的作品</h2>
                 <c:forEach var="poetry" items="${likes}">
                     <div class="form-group">
                         <div class="alert alert-success" role="alert"><p><fmt:formatDate value="${poetry.time}" pattern="yyyy年MM月dd日 HH:mm:ss"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;浏览量:${poetry.views}&nbsp;&nbsp;&nbsp;点赞量:${poetry.likes}</p>
-                            <a href="user/poetryDetail/${poetry.id}" style="color:#3c763d;font-size: 17px">${poetry.username}——${poetry.title}</a></div>
+                            <a href="user/poetryDetail/${poetry.id}" style="color:#3c763d;font-size: 16px;text-decoration: none"><span style="font-size: 20px">${poetry.title}</span>&nbsp;&nbsp;&nbsp;${poetry.username}</a></div>
                     </div>
                 </c:forEach>
             </form>

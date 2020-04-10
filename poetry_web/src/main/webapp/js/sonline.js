@@ -75,13 +75,13 @@
 
 	//子插件：设置列表参数
 	$.fn.setList = function(opts) {
-		$("body").append("<div class='SonlineBox' id='SonlineBox' style='top:-600px;width:250px'><div class='openTrigger' style='display:none' title='展开'></div><div class='contentBox' style='width:250px'><div class='closeTrigger'><img src='/images/closeBtnImg.gif' title='关闭' /></div><div class='titleBox' style='width:250px'> </span> </div><div class='listBox'></div></div></div>");
+		$("body").append("<div class='SonlineBox' id='SonlineBox' style='top:-600px;width:250px'><div class='openTrigger' style='display:none' title='展开'></div><div class='contentBox' style='width:250px'><div class='closeTrigger'><img src='/images/closeBtnImg.gif' title='关闭' /></div><div class='titleBox' style='width:250px;background: #177cb0;color: white;text-align: center;font-size: 15px'> 在线好友</span> </div><div class='listBox'></div></div></div>");
 		if (opts.Qqlist == "") {
 			$("#SonlineBox > .contentBox > .listBox").append("<p style='padding:15px'>您暂时还没有一个好友哦。</p>")
 		} else {
 			var qqListHtml = $.fn.Sonline.splitStr(opts);
 			$("#SonlineBox > .contentBox > .listBox").append(qqListHtml);
-			var yjfk="d<form class='form-inline' role='form'><div class='form-group'><label class='sr-only' for='name'>名称</label><input style='width:150px' type='text' class='form-control' style='width:180px; height:15px' id='name' placeholder='请输要发送的消息'></div><button type='submit' style='display: inline-block' height='30px' class='btn btn-sm'>发送</button></form>";
+			var yjfk="d<form class='form-inline' role='form'><div class='form-group'><label class='sr-only' for='name'>名称</label><input style='width:150px' type='text' class='form-control' style='width:180px; height:15px' id='name' placeholder='请输要发送的消息'></div><button type='submit' style='display: inline-block;width:30px;background: #1685a9;color: white' class='btn btn-sm'>发送</button></form>";
 			$("#SonlineBox > .contentBox > .listBox").append(yjfk);
 		}
 		if (opts.Position == "left") {

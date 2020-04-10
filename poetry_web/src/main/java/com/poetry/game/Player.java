@@ -3,7 +3,6 @@ package com.poetry.game;
 import com.poetry.entity.User;
 import net.sf.json.JSONObject;
 import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
@@ -16,6 +15,10 @@ public class Player {
     private boolean isPlaying;
     private int choice = -1;   //-1代表不做任何限制
     private GameControll gameControll;
+    private Invite invite;
+    private boolean gameing;
+
+    private int count=0;
     //创建玩家后就开始检测
     public Player() {   //此时需要开启一个线程计时20秒  过20秒后 若仍未开始游戏，则退出队列
         //为什么会报异常
@@ -33,6 +36,8 @@ public class Player {
                      JSONObject json = new JSONObject();
                      json.put("timeOut", "true");//告诉客户端   匹配超时
                      Player.this.sendMessage(json.toString());
+                     Player.this.setGameing(false);
+                     Player.this.setPlaying(false);
                      gameControll.removePlayer(Player.this);     //退出等待队列
                  }
 
@@ -75,7 +80,6 @@ public class Player {
     }
 
     public void sendMessage(String message) {
-
         TextMessage msg = new TextMessage(message);
         try {
             if (session.isOpen())
@@ -116,6 +120,34 @@ public class Player {
 
     public void setGameControll(GameControll gameControll) {
         this.gameControll = gameControll;
+    }
+
+    public Invite getInvite() {
+        return invite;
+    }
+
+    public void setInvite(Invite invite) {
+        this.invite = invite;
+    }
+
+    public boolean isGameing() {
+        return gameing;
+    }
+
+    public void setGameing(boolean gameing) {
+        this.gameing = gameing;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public  void  addCount(){
+        count=(count+1)%100;
     }
 }
 

@@ -80,8 +80,7 @@ public class LoginController {
     @GetMapping("/login")
     public String loginPage(String code, String state, HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
-        System.out.println("获取到到code" + code);
-        System.out.println("获取到state" + state);
+
         String state2 = (String) session.getAttribute("qqState");
       /*  if (state2 == null) {//说明没去腾讯登录
             return "redirect:/login/qq";
@@ -112,7 +111,7 @@ public class LoginController {
 
     @PostMapping("/loginAccount")
     public String loginAccount(HttpSession session, String account, String password, Model model) {
-        System.out.println("......." + account);
+
         User user = userService.findByAccountAndPassword(account, password);
         if (user != null) {
             session.setAttribute("user", user);
@@ -133,8 +132,7 @@ public class LoginController {
     @PostMapping("/bind/qq/user")
     public String bindUser(String account, String password, HttpSession session, Model model) {
         JsonNode qqInfo = (JsonNode) session.getAttribute("qqInfo");
-        System.out.println(account);
-        System.out.println(password);
+
         if (qqInfo == null) {
             model.addAttribute("qqError", "QQ登录信息不存在");
             return "bind";
@@ -144,7 +142,7 @@ public class LoginController {
                 model.addAttribute("loginError", "用户名或密码不正确");
                 return "bind";
             } else {
-                System.out.println(openId);
+
                 user.setQqOpenid(openId);
                 userService.update(user);
                 User u = userService.getByQqOpenid(openId);
@@ -158,8 +156,7 @@ public class LoginController {
     @PostMapping("/bind/qq/create")
     public String bindCreate(String account, String password, HttpSession session, Model model) {
         JsonNode qqInfo = (JsonNode) session.getAttribute("qqInfo");
-        System.out.println(account);
-        System.out.println(password);
+
         if (qqInfo == null) {
             return "bind";
         } else {
@@ -172,7 +169,7 @@ public class LoginController {
             user1.setPassword(password);
             user1.setQqOpenid(openId);
             user1.setUsername(qqInfo.get("nickname").asText());
-            user1.setImage(qqInfo.get("figureurl_qq_1").asText());
+            user1.setImage("g.jpg");
             user1.setTotalNumber(0);
             user1.setWinNumber(0);
             user1.setViews(0);
@@ -182,54 +179,6 @@ public class LoginController {
             session.setAttribute("user", u);
             return "redirect:/choosePage";
         }
-    }
-
-
-   /* //登录
-    @RequestMapping("/login")
-    public String login(User user, HttpServletRequest request, HttpServletResponse response, Model model) {
-        User login = loginService.login(user.getAccount(), user.getPassword());
-        if (login != null) {
-            request.getSession().setAttribute("user", login);
-            if (request.getParameter("remember") != null) {
-                //记住密码
-                Cookie cookie1 = new Cookie("account", user.getAccount());
-                //有效期为十天
-                cookie1.setMaxAge(60 * 60 * 24 * 10);
-                Cookie cookie2 = new Cookie("password", user.getPassword());
-                cookie2.setMaxAge(60 * 60 * 24 * 10);
-                response.addCookie(cookie1);
-                response.addCookie(cookie2);
-            } else {
-                //清除cookie
-                Cookie[] cookies = request.getCookies();
-                for (Cookie cookie : cookies) {
-                    if (cookie.getName().equals("account")) {
-                        cookie.setMaxAge(0);
-                        response.addCookie(cookie);
-                    } else if (cookie.getName().equals("password")) {
-                        cookie.setMaxAge(0);
-                        response.addCookie(cookie);
-                    }
-                }
-            }
-            String writePage = (String) request.getSession().getAttribute("writePage");
-            if (writePage != null && writePage.equals("1")) {
-                //跳转到写诗界面并销毁相应session属性
-                request.getSession().removeAttribute("writePage");
-                return "redirect:/user/writePage";
-            }
-            //将消息个数放到session中
-            int count1 = messageService.getUnreadNum(login.getId());
-            int count2 = friendService.getRequestCount(login.getAccount());
-            request.getSession().setAttribute("messageNum", count1 + count2);
-            return "redirect:/enjoy/index";
-        }
-        //把错误密码清除掉
-        user.setPassword(null);
-        model.addAttribute("user", user);
-        model.addAttribute("error", "用户名或密码错误，请重试");
-        return "login";
     }
 
     //跳转到注册界面
@@ -269,7 +218,7 @@ public class LoginController {
                 userService.insert(user);
                 model.addAttribute("user", user);
                 //注册完跳转到个性化界面
-                request.getSession().setAttribute("userId", user.getId());
+                request.getSession().setAttribute("user", user);
                 return "redirect:/choosePage";
             } else {
                 //两次密码不一样
@@ -278,7 +227,7 @@ public class LoginController {
                 return "register";
             }
         }
-    }*/
+    }
 
     @RequestMapping("/choosePage")
     public String choosePage(Model model, HttpServletRequest request) {
@@ -294,20 +243,22 @@ public class LoginController {
 
     //保存用户选择的个性化选项
     @RequestMapping("/choose_enjoy")
-    public String choose(HttpServletRequest request, Model model) {
+    public String choose(HttpServletRequest request, Model model, @RequestParam("type") String type) {
         User user = (User) request.getSession().getAttribute("user");
-        //诗词类型
-        String type = request.getParameter("type");
+
         //作者id
         Integer authorId = Integer.valueOf(request.getParameter("authorId"));
         //朝代
         String dynasty = request.getParameter("dynasty");
+
+
         //更新用户信息
         user.setLikeType(type);
         user.setLikeAuthorId(authorId);
         user.setLikeDynasty(dynasty);
         userService.editByPrimaryKey(user);
-        request.getSession().setAttribute("user", user);
+        User user1 = userService.getByAccount(user.getAccount());
+        request.getSession().setAttribute("user", user1);
         return "redirect:/enjoy/index";
     }
 
@@ -359,7 +310,7 @@ public class LoginController {
         String winStr;
         User u = (User) request.getSession().getAttribute("user");
         User user = userService.getByAccount(u.getAccount());
-        System.out.println(user);
+
         user.setViews(userPoetryService.getAllViewsByUserId(user.getId()));
         model.addAttribute("user", user);
         //计算胜率

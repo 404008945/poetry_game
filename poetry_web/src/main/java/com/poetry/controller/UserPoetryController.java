@@ -168,6 +168,13 @@ public class UserPoetryController {
             commentDto.add(dto);
         }
         model.addAttribute("commentDto", commentDto);
+
+        //判断用户是不是和诗的作者是好友
+        if (user != null) {
+            boolean flag = friendService.judgeFriends(user.getAccount(), author.getAccount());
+            model.addAttribute("isFriend", flag);
+        }
+        model.addAttribute("account1", author.getAccount());
         return "user_poetry_detail";
     }
 
@@ -287,7 +294,7 @@ public class UserPoetryController {
         //用户必须登录才能点赞
         User user = (User) request.getSession().getAttribute("user");
         if (user != null) {
-            System.out.println(likes);
+
             if (likes) {
                 //添加赞
                 Likes likes1 = new Likes();
@@ -334,8 +341,16 @@ public class UserPoetryController {
 
         //添加验证消息
         List<RequestDto> requestDtos = friendService.getRequest(user.getAccount());
-        model.addAttribute("requestMessage",requestDtos);
+        model.addAttribute("requestMessage", requestDtos);
         return "message";
+    }
+
+    //删除历史消息
+    @RequestMapping("/removeMessage")
+    public String removeMessage(HttpServletRequest request) {
+        Integer id = Integer.valueOf(request.getParameter("id"));
+        messageService.removeByPrimaryKey(id);
+        return "redirect:/user/message";
     }
 
     @ModelAttribute  //所有controller执行前都要执行他

@@ -3,9 +3,6 @@ package com.poetry.game;
 import com.poetry.entity.Question;
 import com.poetry.service.UserService;
 import net.sf.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.Date;
@@ -49,20 +46,30 @@ public class Room {//生成房间时把问题也加载进去
             } else {
                 winNum = -1;
             }
+
             /*
             结算后写入数据库
              */
+            players[0].setUser(userService.getByPrimaryKey(players[0].getUser().getId()));
+            players[1].setUser(userService.getByPrimaryKey(players[1].getUser().getId()));
             players[0].getUser().setTotalNumber(players[0].getUser().getTotalNumber() + 1);
+            if(players[0].getUser().getHighestScore()<players[0].getScore())
+            {
+                players[0].getUser().setHighestScore(players[0].getScore());
+            }
             players[0].getUser().setWinNumber(players[0].getUser().getWinNumber() + p0);
             players[1].getUser().setTotalNumber(players[1].getUser().getTotalNumber() + 1);
             players[1].getUser().setWinNumber(players[1].getUser().getWinNumber() + p1);
+            if(players[1].getUser().getHighestScore()<players[1].getScore())
+            {
+                players[1].getUser().setHighestScore(players[1].getScore());
+            }
             userService.updateByPrimaryKey(players[0].getUser());
             userService.updateByPrimaryKey(players[1].getUser());
             sendWin();
             //清除掉房间
             this.gameControll.claearRoom(roomIdx);
             return;//结束此函数同时还要销毁自身
-
         }
         new Thread(new Runnable() {
             @Override
@@ -88,7 +95,6 @@ public class Room {//生成房间时把问题也加载进去
             players[i].sendMessage(jsonObject.toString());//发送之前转json
         }
     }
-
     public JSONObject creatJson() {
         JSONObject jsonObject = new JSONObject();//注入题目   根据questionNum
         Question question = questions.get(questionNum - 1);
@@ -109,12 +115,14 @@ public class Room {//生成房间时把问题也加载进去
         players[1] = p2;
         p1.setPlaying(true);
         p2.setPlaying(true);
+
         this.roomIdx = roomIdx;
         this.questions = questions;
         this.gameControll = gameControll;
         this.userService = userService;
         sendUserInfo(0);
         sendUserInfo(1);//对相应的用户发送对手的信息
+
         sendGame1Problem();
     }
 
@@ -134,7 +142,6 @@ public class Room {//生成房间时把问题也加载进去
             sendGame1Problem();
         }
     }
-
     public void sendWin() {
         JSONObject json = new JSONObject();
         json.put("score0", players[0].getScore());
@@ -143,13 +150,23 @@ public class Room {//生成房间时把问题也加载进去
         json.put("over", "true");
         this.players[0].setPlaying(false);
         this.players[1].setPlaying(false);
+        players[0].setGameing(false);
+        players[1].setGameing(false);
+        players[0].setScore(0);
+        players[1].setScore(0);
+        if(players[0].getInvite()!=null) {
+            players[0].getInvite().destory();
+        }
+        if(players[1].getInvite()!=null) {
+            players[1].getInvite().destory();
+        }//摧毁可以再次被邀请
         players[0].sendMessage(json.toString());
         players[1].sendMessage(json.toString());
-    }
+        //这个时候需要  摧毁Invite
 
+    }
     public void sendScore() {
         JSONObject json = new JSONObject();
-
         json.put("score0", this.getPlayers()[0].getScore());
         json.put("score1", this.getPlayers()[1].getScore());
         json.put("score", "true");

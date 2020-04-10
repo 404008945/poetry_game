@@ -23,19 +23,19 @@
         window.onload = function() {
             var modal = new RModal(document.getElementById('modal'), {
                 beforeOpen: function(next) {
-                    console.log('beforeOpen');
+
                     next();
                 }
                 , afterOpen: function() {
-                    console.log('opened');
+
                 }
 
                 , beforeClose: function(next) {
-                    console.log('beforeClose');
+
                     next();
                 }
                 , afterClose: function() {
-                    console.log('closed');
+
                 }
 
                 // , content: 'Abracadabra'
@@ -66,26 +66,25 @@
 
 </head>
 <body style="background-color: #eaf5ff">
+<jsp:include page="nav.jsp"/>
 <table class="table table-bordered" style="width: 70%;text-align:center;margin-left: 15%;margin-top: 150px;font-size: 17px">
     <h2 style="text-align:center;margin-top:100px">搜索结果</h2>
     <thead>
     <tr>
         <th style="text-align:center;">账户</th>
         <th style="text-align:center;">昵称</th>
-        <th style="text-align:center;">电子邮箱</th>
         <th style="text-align:center;">操作</th>
     </tr>
     </thead>
     <tbody>
-    <tr>
+    <tr style="font-size: 20px">
         <td><a href="/user/poetry/${user.id}/1" style="cursor: pointer;">${user.account}</a></td>
         <td>${user.username}</td>
-        <td>${user.email}</td>
         <c:if test="${msg!=null}">
             <td style="color: #e14b7e">${msg}</td>
         </c:if>
         <c:if test="${msg==null}">
-            <td><a href="/friend/add?account=${user.account}" style="cursor: pointer;" id="showModal">添加该好友</a></td>
+            <td><a href="/friend/add?account=${user.account}" style="cursor: pointer;" id="showModal">添加用户为好友</a></td>
         </c:if>
     </tr>
     </tbody>

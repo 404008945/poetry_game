@@ -33,9 +33,9 @@ public class PoetryServiceImpl implements PoetryService {
 
     public PageInfo getByAuthor(String author,int pageNumber,int pageSize) {
         PageHelper.startPage(pageNumber,pageSize);
-        System.out.println(author);
+
         List<Poetry> poetry = poetryDao.selectByAuthor(author);
-        System.out.println(poetry.size());
+
         PageInfo pageInfo=new PageInfo<Poetry>(poetry);
         return pageInfo;
     }
